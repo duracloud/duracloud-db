@@ -13,7 +13,6 @@ import java.util.Iterator;
 import org.duracloud.common.db.error.NotFoundException;
 import org.duracloud.mill.db.model.ManifestItem;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 /**
  * @author Daniel Bernstein

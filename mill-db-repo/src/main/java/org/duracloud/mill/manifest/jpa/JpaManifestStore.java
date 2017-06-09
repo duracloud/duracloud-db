@@ -11,7 +11,6 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Iterator;
 
-import org.duracloud.common.collection.IteratorSource;
 import org.duracloud.common.collection.StreamingIterator;
 import org.duracloud.common.collection.jpa.JpaIteratorSource;
 import org.duracloud.common.db.error.NotFoundException;
@@ -201,7 +200,8 @@ public class JpaManifestStore implements
      */
     private boolean eventOutOfOrder(ManifestItem item, Date eventTimestamp) {
         Date itemTimestamp = item.getModified();
-        if(eventTimestamp.before(itemTimestamp)){
+        long time = itemTimestamp.getTime();
+        if(eventTimestamp.getTime() < time){
             log.warn("The current database item is more " +
                      "current that the event: item last modified: " +
                      "{}, event timestamp: {}. Likely cause: events " +

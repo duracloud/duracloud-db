@@ -8,6 +8,7 @@
 package org.duracloud.mill.db.repo;
 
 import java.text.MessageFormat;
+import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -65,7 +66,6 @@ public class MillJpaRepoConfig {
                    env.getProperty("mill.db.name", "mill")));
         dataSource.setUsername(env.getProperty("mill.db.user", "user"));
         dataSource.setPassword(env.getProperty("mill.db.pass", "pass"));
-
         dataSource.setTestOnBorrow(true);
         dataSource.setValidationQuery("SELECT 1");
 
@@ -91,7 +91,11 @@ public class MillJpaRepoConfig {
         emf.setPackagesToScan("org.duracloud.mill");
 
         JpaConfigurationUtil.configureEntityManagerFactory(env,emf);
-
+        if(Boolean.parseBoolean(env.getProperty("generate.database", "false"))){
+            Properties properties = new Properties();
+            properties.setProperty("javax.persistence.schema-generation.database.action", "create");
+            emf.setJpaProperties(properties);
+        }
         return emf;
     }
 

@@ -131,9 +131,10 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
     @Test
     public void testIgnoreUpdateDueToOutOfOrderMessage() throws ManifestItemWriteException {
         createTestSubject();
-        Date timestamp = new Date();
         ManifestItem returnItem = createMock(ManifestItem.class);
-        expect(returnItem.getModified()).andReturn(new Date(System.currentTimeMillis() + 1000));
+        Date present = new Date(System.currentTimeMillis());
+        Date past = new Date(present.getTime()-1);
+        expect(returnItem.getModified()).andReturn(present);
 
         expect(this.repo.findByAccountAndStoreIdAndSpaceIdAndContentId(account,
                                                                        storeId,
@@ -148,7 +149,7 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
                         contentChecksum,
                         contentMimetype,
                         contentSize,
-                        timestamp));
+                        past));
     }
 
     @Test
