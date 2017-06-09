@@ -39,14 +39,16 @@ public abstract class JpaIntegrationTestBase extends EasyMockSupport {
 
     @Before
     public void setup() {
-
+        int port = 3310;
         MysqldConfig config = aMysqldConfig(v5_6_latest).withCharset(UTF8).withPort(3306).withUser("user", "pass")
                 .withTimeZone("GMT").withTimeout(2, TimeUnit.MINUTES).withServerVariable("max_connect_errors", 666)
+                .withPort(port)
                 .build();
 
         mysqld = anEmbeddedMysql(config).addSchema("mill", ScriptResolver.classPathScript("db_init.sql")).start();
 
         System.setProperty("generate.database", "true");
+        System.setProperty("mill.db.port", port+"");
 
         context = new AnnotationConfigApplicationContext("org.duracloud.mill");
 
