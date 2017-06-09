@@ -37,7 +37,7 @@ public abstract class BaseEntity {
     private Date modified;
 
     @Version
-    @Column(nullable=false, columnDefinition="int NOT NULL DEFAULT 0")
+    @Column(nullable = false, columnDefinition = "int NOT NULL DEFAULT 0")
     private int version;
 
 	public Long getId() {
@@ -70,13 +70,12 @@ public abstract class BaseEntity {
     
 
     public int getVersion() {
-		return version;
-	}
+        return version;
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
-
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
     @Override
     public int hashCode() {

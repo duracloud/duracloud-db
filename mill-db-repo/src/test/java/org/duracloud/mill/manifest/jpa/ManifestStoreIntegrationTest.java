@@ -22,7 +22,12 @@ import org.duracloud.mill.test.jpa.JpaIntegrationTestBase;
 import org.junit.Test;
 
 /**
- * @author Daniel Bernstein Date: June 8, 2017
+ * This test class runs tests against a live embedded mysql database.
+ * While the JpaManifestStoreTest covers similar territory, we uncovered
+ * some bugs connected to underlying JPA storage mechanisms.  This class 
+ * was added to verify that the code works against a running database. 
+ * @author Daniel Bernstein 
+ *         Date: June 8, 2017
  */
 public class ManifestStoreIntegrationTest extends JpaIntegrationTestBase {
 
@@ -116,7 +121,7 @@ public class ManifestStoreIntegrationTest extends JpaIntegrationTestBase {
         // get it
         ManifestItem item2 = store.getItem(account, storeId, spaceId, contentId);
 
-        // verify time modified exactly matches new timestamp
+        // verify modified time of the retrieved item exactly matches the original timestamp.
         assertEquals(currentTime, item2.getModified().getTime());
         // verify updated fields
         assertEquals(contentChecksum, item2.getContentChecksum());
