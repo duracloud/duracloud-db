@@ -10,7 +10,6 @@ package org.duracloud.account.db.model;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/10/13
+ * Date: 7/10/13
  */
 @Entity
 public class DuracloudUser extends BaseEntity implements UserDetails {
@@ -39,13 +38,13 @@ public class DuracloudUser extends BaseEntity implements UserDetails {
     private boolean accountNonExpired = true;
     private boolean credentialsNonExpired = true;
     private boolean accountNonLocked = true;
-    
+
     /**
      * A CIDR formatted IP Range.
      */
-    private String allowableIPAddressRange;  
+    private String allowableIPAddressRange;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private Set<AccountRights> accountRights;
     private boolean root = false;
 
@@ -168,8 +167,8 @@ public class DuracloudUser extends BaseEntity implements UserDetails {
                 }
             }
         }
-        
-        if(isRoot()){
+
+        if (isRoot()) {
             authorities.add(new SimpleGrantedAuthority(Role.ROLE_ROOT.name()));
         }
         return authorities;
@@ -184,15 +183,15 @@ public class DuracloudUser extends BaseEntity implements UserDetails {
                 }
             }
         }
-        
-        if(isRoot()){
+
+        if (isRoot()) {
             roles.addAll(Role.ROLE_ROOT.getRoleHierarchy());
         }
         return roles;
     }
 
     public Role getRoleByAcct(Long accountId) {
-        if(isRoot()){
+        if (isRoot()) {
             return Role.ROLE_ROOT;
         }
         Set<Role> roles = getRolesByAcct(accountId);
@@ -219,7 +218,7 @@ public class DuracloudUser extends BaseEntity implements UserDetails {
     public boolean isRootUser() {
         return root;
     }
-    
+
     public boolean isRoot() {
         return root;
     }

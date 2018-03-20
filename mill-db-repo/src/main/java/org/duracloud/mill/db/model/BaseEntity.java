@@ -8,39 +8,35 @@
 package org.duracloud.mill.db.model;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Version;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * 
  * @author Daniel Bernstein
- *
  */
 
 @MappedSuperclass
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(columnDefinition="bigint(20) AUTO_INCREMENT")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "bigint(20) AUTO_INCREMENT")
     protected Long id;
 
-
-    @Column(nullable=false, columnDefinition="datetime(3) NOT NULL")
+    @Column(nullable = false, columnDefinition = "datetime(3) NOT NULL")
     private Date modified;
 
     @Version
     @Column(nullable = false, columnDefinition = "int NOT NULL DEFAULT 0")
     private int version;
 
-	public Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -58,16 +54,21 @@ public abstract class BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         BaseEntity that = (BaseEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
 
         return true;
     }
-    
 
     public int getVersion() {
         return version;
@@ -81,12 +82,12 @@ public abstract class BaseEntity {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
-    
+
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-       return ToStringBuilder.reflectionToString(this);
+        return ToStringBuilder.reflectionToString(this);
     }
 }

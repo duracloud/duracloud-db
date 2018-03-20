@@ -8,7 +8,6 @@
 package org.duracloud.account.db.model;
 
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -53,7 +52,6 @@ public class AccountInfo extends BaseEntity implements Comparable<AccountInfo> {
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
- 
     /**
      * The StorageProviderAccount which is used for primary storage
      */
@@ -64,7 +62,7 @@ public class AccountInfo extends BaseEntity implements Comparable<AccountInfo> {
     /**
      * The StorageProviderAccounts which are used for secondary storage
      */
-    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "account_info_id", nullable = true, columnDefinition = "bigint(20)")
     private Set<StorageProviderAccount> secondaryStorageProviderAccounts;
 
@@ -113,7 +111,7 @@ public class AccountInfo extends BaseEntity implements Comparable<AccountInfo> {
     }
 
     public void setPrimaryStorageProviderAccount(
-            StorageProviderAccount primaryStorageProviderAccount) {
+        StorageProviderAccount primaryStorageProviderAccount) {
         this.primaryStorageProviderAccount = primaryStorageProviderAccount;
     }
 
@@ -122,10 +120,9 @@ public class AccountInfo extends BaseEntity implements Comparable<AccountInfo> {
     }
 
     public void setSecondaryStorageProviderAccounts(
-            Set<StorageProviderAccount> secondaryStorageProviderAccounts) {
+        Set<StorageProviderAccount> secondaryStorageProviderAccounts) {
         this.secondaryStorageProviderAccounts = secondaryStorageProviderAccounts;
     }
-
 
     @Override
     public int compareTo(AccountInfo o) {

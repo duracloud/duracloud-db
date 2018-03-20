@@ -7,17 +7,18 @@
  */
 package org.duracloud.common.collection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-
 /**
  * @author Daniel Bernstein
- *         Date: May 22, 2015
+ * Date: May 22, 2015
  */
 public class WriteOnlyStringSetTest {
 
@@ -38,26 +39,25 @@ public class WriteOnlyStringSetTest {
     @Test
     public void test() {
         int capacity = 100;
-        
+
         WriteOnlyStringSet set = new WriteOnlyStringSet(capacity);
         String idPrefix = StringUtils.repeat("a", 200);
-        for (int i = 0; i < capacity; i++){
-            set.add(idPrefix.concat(i+""));
+        for (int i = 0; i < capacity; i++) {
+            set.add(idPrefix.concat(i + ""));
         }
-        
+
         assertEquals(capacity, set.size());
 
-
-        for (int i = 0; i < capacity; i++){
-            assertTrue(set.contains(idPrefix.concat(i+"")));
+        for (int i = 0; i < capacity; i++) {
+            assertTrue(set.contains(idPrefix.concat(i + "")));
         }
 
-        for (int i = 0; i < capacity; i++){
-            set.remove(idPrefix.concat(i+""));
+        for (int i = 0; i < capacity; i++) {
+            set.remove(idPrefix.concat(i + ""));
         }
 
-        for (int i = 0; i < capacity; i++){
-            assertFalse(set.contains(idPrefix.concat(i+"")));
+        for (int i = 0; i < capacity; i++) {
+            assertFalse(set.contains(idPrefix.concat(i + "")));
         }
 
         assertEquals(0, set.size());
@@ -66,16 +66,16 @@ public class WriteOnlyStringSetTest {
     @Test
     public void testAdditionOf1MillionItemsTakesLessThan200Seconds() {
         long start = System.currentTimeMillis();
-        int capacity = 1000*1000*1;
-        
+        int capacity = 1000 * 1000 * 1;
+
         WriteOnlyStringSet set = new WriteOnlyStringSet(capacity);
         String idPrefix = StringUtils.repeat("a", 200);
-        for (int i = 0; i < capacity; i++){
-            set.add(idPrefix.concat(i+""));
+        for (int i = 0; i < capacity; i++) {
+            set.add(idPrefix.concat(i + ""));
         }
-        
+
         assertEquals(capacity, set.size());
-        assertTrue(System.currentTimeMillis()-start < 20*1000);
+        assertTrue(System.currentTimeMillis() - start < 20 * 1000);
     }
 
     /**

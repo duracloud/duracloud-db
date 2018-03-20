@@ -8,7 +8,6 @@
 package org.duracloud.account.db.model;
 
 import java.util.Map;
-
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -23,7 +22,7 @@ import org.duracloud.storage.domain.StorageProviderType;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/10/13
+ * Date: 7/10/13
  */
 @Entity
 public class StorageProviderAccount extends ProviderAccount {
@@ -35,18 +34,18 @@ public class StorageProviderAccount extends ProviderAccount {
     @Enumerated(EnumType.STRING)
     private StorageProviderType providerType;
 
-    @ElementCollection(fetch=FetchType.EAGER)
-    @MapKeyColumn (name="map_key")
-    @CollectionTable(name ="storage_provider_account_properties",
-    joinColumns=@JoinColumn(name="storage_provider_account_id"))
-    @Column(name="map_value")
-    private Map<String,String> properties; 
-    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @MapKeyColumn(name = "map_key")
+    @CollectionTable(name = "storage_provider_account_properties",
+                     joinColumns = @JoinColumn(name = "storage_provider_account_id"))
+    @Column(name = "map_value")
+    private Map<String, String> properties;
+
     /**
      * The max GBs of storage allowable for the account.
      */
     private int storageLimit = 1;
-    
+
     public StorageProviderType getProviderType() {
         return providerType;
     }
@@ -55,11 +54,11 @@ public class StorageProviderAccount extends ProviderAccount {
         this.providerType = providerType;
     }
 
-    public Map<String,String> getProperties() {
+    public Map<String, String> getProperties() {
         return properties;
     }
 
-    public void setProperties(Map<String,String> properties) {
+    public void setProperties(Map<String, String> properties) {
         this.properties = properties;
     }
 

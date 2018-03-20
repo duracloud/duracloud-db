@@ -7,18 +7,18 @@
  */
 package org.duracloud.account.db.repo;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author Erik Paulsson
- *         Date: 7/17/13
+ * Date: 7/17/13
  */
-@Component(value="repoMgr")
+@Component(value = "repoMgr")
 public class DuracloudRepoMgr {
 
     @Autowired
@@ -62,11 +62,9 @@ public class DuracloudRepoMgr {
         return userInvitationRepo;
     }
 
-
     public DuracloudStorageProviderAccountRepo getStorageProviderAccountRepo() {
         return storageProviderAccountRepo;
     }
-
 
     public Set<JpaRepository> getAllRepos() {
         Set<JpaRepository> repos = new HashSet<>();

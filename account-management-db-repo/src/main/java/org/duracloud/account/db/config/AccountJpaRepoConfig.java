@@ -8,8 +8,6 @@
 package org.duracloud.account.db.config;
 
 import java.text.MessageFormat;
-import java.util.Properties;
-
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -24,20 +22,16 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 
  * @author Daniel Bernstein
- * 
  */
 @Configuration
-@EnableJpaRepositories(basePackages = { "org.duracloud.account.db" }, 
-                       entityManagerFactoryRef = AccountJpaRepoConfig.ENTITY_MANAGER_FACTORY_BEAN, 
+@EnableJpaRepositories(basePackages = {"org.duracloud.account.db"},
+                       entityManagerFactoryRef = AccountJpaRepoConfig.ENTITY_MANAGER_FACTORY_BEAN,
                        transactionManagerRef = AccountJpaRepoConfig.TRANSACTION_MANAGER_BEAN)
 @EnableTransactionManagement
 public class AccountJpaRepoConfig {
@@ -49,17 +43,17 @@ public class AccountJpaRepoConfig {
         "accountJpaRepoTransactionManager";
     public static final String ENTITY_MANAGER_FACTORY_BEAN =
         ACCOUNT_REPO_ENTITY_MANAGER_FACTORY_BEAN;
-    
+
     @Autowired
     private Environment env;
-    
+
     @Bean(name = ACCOUNT_REPO_DATA_SOURCE_BEAN, destroyMethod = "close")
     public BasicDataSource accountRepoDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl(MessageFormat.format("jdbc:mysql://{0}:{1}/{2}" +
-        		                                "?characterEncoding=utf8" +
-        		                                "&characxterSetResults=utf8",
+                                               "?characterEncoding=utf8" +
+                                               "&characxterSetResults=utf8",
                                                env.getProperty(ConfigConstants.MC_DB_HOST, "localhost"),
                                                env.getProperty(ConfigConstants.MC_DB_PORT, "3306"),
                                                env.getProperty(ConfigConstants.MC_DB_NAME, "name")));
@@ -71,9 +65,9 @@ public class AccountJpaRepoConfig {
     }
 
     @Primary
-    @Bean(name=TRANSACTION_MANAGER_BEAN)
-    public PlatformTransactionManager
-        accountRepoTransactionManager(@Qualifier(ACCOUNT_REPO_ENTITY_MANAGER_FACTORY_BEAN) EntityManagerFactory entityManagerFactory) {
+    @Bean(name = TRANSACTION_MANAGER_BEAN)
+    public PlatformTransactionManager accountRepoTransactionManager(
+        @Qualifier(ACCOUNT_REPO_ENTITY_MANAGER_FACTORY_BEAN) EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager tm =
             new JpaTransactionManager(entityManagerFactory);
         tm.setJpaDialect(new HibernateJpaDialect());
@@ -81,18 +75,16 @@ public class AccountJpaRepoConfig {
     }
 
     @Bean(name = ACCOUNT_REPO_ENTITY_MANAGER_FACTORY_BEAN)
-    public LocalContainerEntityManagerFactoryBean
-        accountRepoEntityManagerFactory(@Qualifier(ACCOUNT_REPO_DATA_SOURCE_BEAN) DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean accountRepoEntityManagerFactory(
+        @Qualifier(ACCOUNT_REPO_DATA_SOURCE_BEAN) DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean emf =
             new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource);
         emf.setPersistenceUnitName("account-repo-pu");
         emf.setPackagesToScan("org.duracloud.account.db");
 
-
-        JpaConfigurationUtil.configureEntityManagerFactory(env,emf);
+        JpaConfigurationUtil.configureEntityManagerFactory(env, emf);
         return emf;
     }
-
 
 }

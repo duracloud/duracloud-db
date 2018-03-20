@@ -12,68 +12,81 @@ import javax.persistence.Entity;
 
 /**
  * Contains basic configuration information for interacting with the Duracloud Mill.
+ *
  * @author Daniel Bernstein
- *         Date: 05/06/2015
+ * Date: 05/06/2015
  */
 @Entity
 public class DuracloudMill extends BaseEntity {
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String dbName;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String dbHost;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private Integer dbPort;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String dbUsername;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String dbPassword;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String auditQueue;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String auditLogSpaceId;
-    
+
     public String getDbName() {
         return dbName;
     }
+
     public void setDbName(String dbName) {
         this.dbName = dbName;
     }
+
     public String getDbHost() {
         return dbHost;
     }
+
     public void setDbHost(String dbHost) {
         this.dbHost = dbHost;
     }
+
     public Integer getDbPort() {
         return dbPort;
     }
+
     public void setDbPort(Integer dbPort) {
         this.dbPort = dbPort;
     }
+
     public String getDbUsername() {
         return dbUsername;
     }
+
     public void setDbUsername(String dbUsername) {
         this.dbUsername = dbUsername;
     }
+
     public String getDbPassword() {
         return dbPassword;
     }
+
     public void setDbPassword(String dbPassword) {
         this.dbPassword = dbPassword;
     }
+
     public String getAuditQueue() {
         return auditQueue;
     }
+
     public void setAuditQueue(String auditQueue) {
         this.auditQueue = auditQueue;
     }
+
     public String getAuditLogSpaceId() {
         return auditLogSpaceId;
     }
+
     public void setAuditLogSpaceId(String auditLogSpaceId) {
         this.auditLogSpaceId = auditLogSpaceId;
     }
-    
-    
+
 }

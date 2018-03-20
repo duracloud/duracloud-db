@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Daniel Bernstein
- *         Date: 05/06/2015
+ * Date: 05/06/2015
  */
-@Repository(value="duracloudMillRepo")
+@Repository(value = "duracloudMillRepo")
 public interface DuracloudMillRepo extends JpaRepository<DuracloudMill, Long> {
-    
+
 }

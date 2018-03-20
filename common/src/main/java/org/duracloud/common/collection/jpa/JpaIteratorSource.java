@@ -13,47 +13,48 @@ import org.duracloud.common.collection.IteratorSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 /**
- * 
- * @author Daniel Bernstein
- *         Date: Sep 3, 2014
  * @param <R>
  * @param <T>
+ * @author Daniel Bernstein
+ * Date: Sep 3, 2014
  */
 public abstract class JpaIteratorSource<R, T> implements IteratorSource<T> {
     private int currentPage = 0;
     private int maxResults;
     private R repo;
 
-    public JpaIteratorSource(R repo, int maxResults){
+    public JpaIteratorSource(R repo, int maxResults) {
         this.repo = repo;
-        if(maxResults <= 0){
+        if (maxResults <= 0) {
             throw new IllegalArgumentException("maxResults must be greater than 0");
         }
         this.maxResults = maxResults;
     }
 
-    public JpaIteratorSource(R repo){
+    public JpaIteratorSource(R repo) {
         this(repo, 1000);
     }
-    
+
     @Override
     public Collection<T> getNext() {
-        if(currentPage < 0){
+        if (currentPage < 0) {
             return null;
         }
-        Page<T> page =  getNextPage(new PageRequest(currentPage, maxResults), repo);
+        Page<T> page = getNextPage(new PageRequest(currentPage, maxResults), repo);
         currentPage++;
-        if(page.getTotalPages() == currentPage){
+        if (page.getTotalPages() == currentPage) {
             currentPage = -1;
         }
-        
+
         return page.getContent();
-        
+
     }
-    
+
     /**
      * Specific Jpa call goes here.
+     *
      * @param pageable
      * @return
      */

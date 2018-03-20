@@ -9,7 +9,6 @@ package org.duracloud.mill.auditor;
 
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.duracloud.common.db.error.NotFoundException;
 
@@ -22,6 +21,7 @@ public interface AuditLogStore {
 
     /**
      * This method writes the logItem to the audit log.
+     *
      * @param account
      * @param storeId
      * @param spaceId
@@ -50,10 +50,10 @@ public interface AuditLogStore {
                       String sourceSpaceId,
                       String sourceContentId,
                       Date timestamp) throws AuditLogWriteFailedException;
-    
-    
+
     /**
      * Retrieves log history for a content item.
+     *
      * @param account
      * @param storeId
      * @param spaceId
@@ -67,6 +67,7 @@ public interface AuditLogStore {
 
     /**
      * Retrieves log history for a content item in chronological order
+     *
      * @param account
      * @param storeId
      * @param spaceId
@@ -74,16 +75,17 @@ public interface AuditLogStore {
      * @return
      */
     public AuditLogItem getLatestLogItem(String account,
-                                              String storeId,
-                                              String spaceId,
-                                              String contentId) throws NotFoundException;
-    
+                                         String storeId,
+                                         String spaceId,
+                                         String contentId) throws NotFoundException;
+
     /**
      * Adds the following properties to the specified item.
+     *
      * @param item
      * @param properties
      * @throws AuditLogWriteFailedException
      */
     public void updateProperties(AuditLogItem item, String properties) throws AuditLogWriteFailedException;
-    
+
 }

@@ -8,7 +8,6 @@
 package org.duracloud.account.db.model;
 
 import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -16,13 +15,13 @@ import javax.persistence.ManyToOne;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/11/13
+ * Date: 7/11/13
  */
 @Entity
 public class UserInvitation extends BaseEntity {
 
-    @ManyToOne(fetch= FetchType.EAGER, optional=true)
-    @JoinColumn(name="account_id", nullable=true, columnDefinition = "bigint(20)")
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "account_id", nullable = true, columnDefinition = "bigint(20)")
     private AccountInfo account;
 
     private String accountName;
@@ -35,12 +34,12 @@ public class UserInvitation extends BaseEntity {
     private Date expirationDate;
     private String redemptionCode;
 
-    public UserInvitation() {}
+    public UserInvitation() {
+    }
 
-    public UserInvitation(
-            Long id, AccountInfo account, String accountName, String accountOrg, String accountDep,
-            String accountSubdomain, String adminUsername, String userEmail,
-            int expirationDays, String redemptionCode) {
+    public UserInvitation(Long id, AccountInfo account, String accountName, String accountOrg, String accountDep,
+                          String accountSubdomain, String adminUsername, String userEmail, int expirationDays,
+                          String redemptionCode) {
         this.id = id;
         this.account = account;
         this.accountName = accountName;
@@ -139,19 +138,15 @@ public class UserInvitation extends BaseEntity {
         this.redemptionCode = redemptionCode;
     }
 
-
-
-
-
     @Override
     public String toString() {
         return "UserInvitation[id="
-                + id + ", accountId=" + account.getId() + ", accountName=" + accountName
-                + ", accountOrg=" + accountOrg + ", accountDep=" + accountDep
-                + ", accountSubdomain=" + accountSubdomain + ", adminUsername=" + adminUsername
-                + ", userEmail=" + userEmail
-                + ", creationDate=" + creationDate + ", expirationDate="
-                + expirationDate + ", redemptionCode=" + redemptionCode + "]";
+               + id + ", accountId=" + account.getId() + ", accountName=" + accountName
+               + ", accountOrg=" + accountOrg + ", accountDep=" + accountDep
+               + ", accountSubdomain=" + accountSubdomain + ", adminUsername=" + adminUsername
+               + ", userEmail=" + userEmail
+               + ", creationDate=" + creationDate + ", expirationDate="
+               + expirationDate + ", redemptionCode=" + redemptionCode + "]";
 
     }
 }

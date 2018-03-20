@@ -9,9 +9,10 @@ package org.duracloud.account.db.model;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/10/13
+ * Date: 7/10/13
  */
 public interface Identifiable {
     public Long getId();
+
     public void setId(Long id);
 }

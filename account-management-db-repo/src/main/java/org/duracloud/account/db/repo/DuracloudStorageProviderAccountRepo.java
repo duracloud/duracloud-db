@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/9/13
+ * Date: 7/9/13
  */
-@Repository(value="storageProviderAccountRepo")
+@Repository(value = "storageProviderAccountRepo")
 public interface DuracloudStorageProviderAccountRepo extends JpaRepository<StorageProviderAccount, Long> {
 
 }

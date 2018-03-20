@@ -9,7 +9,6 @@ package org.duracloud.mill.db.repo;
 
 import java.text.MessageFormat;
 import java.util.Properties;
-
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -30,13 +29,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 
  * @author Daniel Bernstein
- * 
  */
 @Configuration
-@EnableJpaRepositories(basePackages = { "org.duracloud.mill" }, 
-                       entityManagerFactoryRef = MillJpaRepoConfig.ENTITY_MANAGER_FACTORY_BEAN, 
+@EnableJpaRepositories(basePackages = {"org.duracloud.mill"},
+                       entityManagerFactoryRef = MillJpaRepoConfig.ENTITY_MANAGER_FACTORY_BEAN,
                        transactionManagerRef = MillJpaRepoConfig.TRANSACTION_MANAGER_BEAN)
 @EnableTransactionManagement
 public class MillJpaRepoConfig {
@@ -57,13 +54,13 @@ public class MillJpaRepoConfig {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl(MessageFormat.format("jdbc:mysql://{0}:{1}/{2}" +
-                    "?useLegacyDatetimeCode=false" +
-                    "&serverTimezone=GMT" +
-                    "&characterEncoding=utf8" +
-                    "&characxterSetResults=utf8",
-                   env.getProperty("mill.db.host", "localhost"),
-                   env.getProperty("mill.db.port", "3306"),
-                   env.getProperty("mill.db.name", "mill")));
+                                               "?useLegacyDatetimeCode=false" +
+                                               "&serverTimezone=GMT" +
+                                               "&characterEncoding=utf8" +
+                                               "&characxterSetResults=utf8",
+                                               env.getProperty("mill.db.host", "localhost"),
+                                               env.getProperty("mill.db.port", "3306"),
+                                               env.getProperty("mill.db.name", "mill")));
         dataSource.setUsername(env.getProperty("mill.db.user", "user"));
         dataSource.setPassword(env.getProperty("mill.db.pass", "pass"));
         dataSource.setTestOnBorrow(true);
@@ -72,9 +69,9 @@ public class MillJpaRepoConfig {
         return dataSource;
     }
 
-    @Bean(name=TRANSACTION_MANAGER_BEAN)
-    public PlatformTransactionManager
-        millRepoTransactionManager(@Qualifier(MILL_REPO_ENTITY_MANAGER_FACTORY_BEAN) EntityManagerFactory entityManagerFactory) {
+    @Bean(name = TRANSACTION_MANAGER_BEAN)
+    public PlatformTransactionManager millRepoTransactionManager(
+        @Qualifier(MILL_REPO_ENTITY_MANAGER_FACTORY_BEAN) EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager tm =
             new JpaTransactionManager(entityManagerFactory);
         tm.setJpaDialect(new HibernateJpaDialect());
@@ -82,16 +79,16 @@ public class MillJpaRepoConfig {
     }
 
     @Bean(name = MILL_REPO_ENTITY_MANAGER_FACTORY_BEAN)
-    public LocalContainerEntityManagerFactoryBean
-        millRepoEntityManagerFactory(@Qualifier(MILL_REPO_DATA_SOURCE_BEAN) DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean millRepoEntityManagerFactory(
+        @Qualifier(MILL_REPO_DATA_SOURCE_BEAN) DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean emf =
             new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource);
         emf.setPersistenceUnitName("mill-repo-pu");
         emf.setPackagesToScan("org.duracloud.mill");
 
-        JpaConfigurationUtil.configureEntityManagerFactory(env,emf);
-        if(Boolean.parseBoolean(env.getProperty("generate.database", "false"))){
+        JpaConfigurationUtil.configureEntityManagerFactory(env, emf);
+        if (Boolean.parseBoolean(env.getProperty("generate.database", "false"))) {
             Properties properties = new Properties();
             properties.setProperty("javax.persistence.schema-generation.database.action", "create");
             emf.setJpaProperties(properties);
@@ -100,7 +97,7 @@ public class MillJpaRepoConfig {
     }
 
     @Bean
-    public ManifestStore manifestStore(JpaManifestItemRepo manifestRepo){
-       return  new JpaManifestStore(manifestRepo);
+    public ManifestStore manifestStore(JpaManifestItemRepo manifestRepo) {
+        return new JpaManifestStore(manifestRepo);
     }
 }

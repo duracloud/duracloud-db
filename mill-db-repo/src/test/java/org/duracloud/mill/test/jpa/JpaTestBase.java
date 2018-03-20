@@ -25,46 +25,46 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * @author Daniel Bernstein
- *         Date: Sep 3, 2014
+ * Date: Sep 3, 2014
  */
 @RunWith(EasyMockRunner.class)
 public abstract class JpaTestBase<T> extends EasyMockSupport {
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         verifyAll();
     }
 
     protected void verifyPageable(Capture<Pageable> capture) {
         Pageable pageable = capture.getValue();
         assertNotNull(pageable);
-        assertEquals(0,pageable.getPageNumber());
+        assertEquals(0, pageable.getPageNumber());
     }
 
     protected void verifyIterator(int count, Iterator it) {
         int recount = 0;
-        while(it.hasNext()){
+        while (it.hasNext()) {
             it.next();
             recount++;
         }
         assertEquals(count, recount);
     }
-    
+
     protected Page<T> setupPage(int count) {
         Page<T> page = createMock(Page.class);
-        
-         List<T> items = setupList(count);
+
+        List<T> items = setupList(count);
         expect(page.getContent()).andReturn(items);
         expect(page.getTotalPages()).andReturn(1);
         return page;
     }
 
     protected List<T> setupList(int count) {
-         List<T> items = new ArrayList<>();
-        for(int i = 0; i < count; i++){
+        List<T> items = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
             items.add(create());
         }
-        
+
         return items;
     }
 

@@ -28,7 +28,7 @@ public enum StorageProviderType {
 
     public static StorageProviderType fromString(String pt) {
         for (StorageProviderType pType : values()) {
-            if (pType.text.equalsIgnoreCase(pt)||
+            if (pType.text.equalsIgnoreCase(pt) ||
                 pType.name().equalsIgnoreCase(pt)) {
                 return pType;
             }
@@ -41,7 +41,7 @@ public enum StorageProviderType {
         return text;
     }
 
-    public String getName(){
+    public String getName() {
         return name();
     }
 }

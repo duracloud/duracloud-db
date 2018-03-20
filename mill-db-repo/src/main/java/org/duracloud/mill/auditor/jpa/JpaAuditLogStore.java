@@ -11,16 +11,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.duracloud.mill.auditor.AuditLogItem;
-import org.duracloud.mill.auditor.AuditLogStore;
-import org.duracloud.mill.auditor.AuditLogWriteFailedException;
 import org.duracloud.common.collection.StreamingIterator;
 import org.duracloud.common.collection.jpa.JpaIteratorSource;
 import org.duracloud.common.db.error.NotFoundException;
+import org.duracloud.mill.auditor.AuditLogItem;
+import org.duracloud.mill.auditor.AuditLogStore;
+import org.duracloud.mill.auditor.AuditLogWriteFailedException;
 import org.duracloud.mill.db.model.JpaAuditLogItem;
 import org.duracloud.mill.db.repo.JpaAuditLogItemRepo;
 import org.duracloud.mill.db.repo.MillJpaRepoConfig;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 /**
- * 
  * @author Daniel Bernstein
- * 
  */
 public class JpaAuditLogStore implements AuditLogStore {
     private static Logger log = LoggerFactory.getLogger(JpaAuditLogStore.class);
@@ -83,15 +80,16 @@ public class JpaAuditLogStore implements AuditLogStore {
             log.debug("item saved: {}", item);
 
         } catch (Exception ex) {
-            if(ex instanceof org.springframework.dao.DataIntegrityViolationException){
-                log.warn("failed to add audit log item {}: due to data integrity violation: suspected duplicate record: -> message={}", 
-                         ex.getMessage());
-            }else{
+            if (ex instanceof org.springframework.dao.DataIntegrityViolationException) {
+                log.warn(
+                    "failed to add audit log item {}: due to data integrity violation: suspected duplicate record: ->" +
+                    " message={}",
+                    ex.getMessage());
+            } else {
                 throw new AuditLogWriteFailedException(ex, item);
             }
         }
     }
-
 
     @Override
     @Transactional(value = MillJpaRepoConfig.TRANSACTION_MANAGER_BEAN, readOnly = true)
@@ -99,34 +97,34 @@ public class JpaAuditLogStore implements AuditLogStore {
                                               final String storeId,
                                               final String spaceId,
                                               final String contentId) {
-        return (Iterator) new StreamingIterator<JpaAuditLogItem>(new JpaIteratorSource<JpaAuditLogItemRepo, JpaAuditLogItem>(auditLogRepo) {
-            @Override
-            protected Page<JpaAuditLogItem> getNextPage(Pageable pageable, JpaAuditLogItemRepo repo) {
-                return repo
+        return (Iterator) new StreamingIterator<JpaAuditLogItem>(
+            new JpaIteratorSource<JpaAuditLogItemRepo, JpaAuditLogItem>(auditLogRepo) {
+                @Override
+                protected Page<JpaAuditLogItem> getNextPage(Pageable pageable, JpaAuditLogItemRepo repo) {
+                    return repo
                         .findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByContentIdAsc(account,
                                                                                           storeId,
                                                                                           spaceId,
                                                                                           contentId,
                                                                                           pageable);
-            }
-        });
+                }
+            });
     }
 
     @Override
     @Transactional(value = MillJpaRepoConfig.TRANSACTION_MANAGER_BEAN, readOnly = true)
-    public AuditLogItem
-            getLatestLogItem(String account,
-                             String storeId,
-                             String spaceId,
-                             String contentId) throws NotFoundException {
+    public AuditLogItem getLatestLogItem(String account,
+                                         String storeId,
+                                         String spaceId,
+                                         String contentId) throws NotFoundException {
         List<JpaAuditLogItem> result = auditLogRepo
-                .findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByTimestampDesc(account,
-                                                                                   storeId,
-                                                                                   spaceId,
-                                                                                   contentId);
-        if(!CollectionUtils.isEmpty(result)){
+            .findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByTimestampDesc(account,
+                                                                               storeId,
+                                                                               spaceId,
+                                                                               contentId);
+        if (!CollectionUtils.isEmpty(result)) {
             return result.get(0);
-        }else{
+        } else {
             return null;
         }
     }
@@ -134,17 +132,17 @@ public class JpaAuditLogStore implements AuditLogStore {
     @Override
     @Transactional(value = MillJpaRepoConfig.TRANSACTION_MANAGER_BEAN, propagation = Propagation.REQUIRES_NEW)
     public void updateProperties(AuditLogItem item, String properties)
-            throws AuditLogWriteFailedException {
-        
-        if(!(item instanceof JpaAuditLogItem)){
+        throws AuditLogWriteFailedException {
+
+        if (!(item instanceof JpaAuditLogItem)) {
             throw new AuditLogWriteFailedException("audit log item must be of type " +
                                                    "JpaAuditLogItem when used with this " +
                                                    "implementation: item is of type "
                                                    + item.getClass().getCanonicalName(), item);
         }
-        Long id = ((JpaAuditLogItem)item).getId();
-        
-        JpaAuditLogItem refreshedItem = auditLogRepo.findOne(id); 
+        Long id = ((JpaAuditLogItem) item).getId();
+
+        JpaAuditLogItem refreshedItem = auditLogRepo.findOne(id);
         refreshedItem.setContentProperties(properties);
         auditLogRepo.saveAndFlush(refreshedItem);
     }

@@ -7,17 +7,17 @@
  */
 package org.duracloud.account.db.repo;
 
+import java.util.List;
+
 import org.duracloud.account.db.model.UserInvitation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * @author Erik Paulsson
- *         Date: 7/9/13
+ * Date: 7/9/13
  */
-@Repository(value="userInvitationRepo")
+@Repository(value = "userInvitationRepo")
 public interface DuracloudUserInvitationRepo extends JpaRepository<UserInvitation, Long> {
 
     /**

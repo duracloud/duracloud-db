@@ -9,17 +9,18 @@ package org.duracloud.common.util;
 
 /**
  * @author Daniel Bernstein
- *         Date: Sep 12, 2014
+ * Date: Sep 12, 2014
  */
-public  class SystemPropertiesVerifier {
+public class SystemPropertiesVerifier {
 
     private String[] props;
-    public SystemPropertiesVerifier(String[] props){
+
+    public SystemPropertiesVerifier(String[] props) {
         this.props = props;
     }
-    
-    public void verify(){
-        for(String prop : props){
+
+    public void verify() {
+        for (String prop : props) {
             verifySystemProp(prop);
         }
     }
@@ -27,10 +28,10 @@ public  class SystemPropertiesVerifier {
     /**
      * @param key
      */
-    protected  void verifySystemProp(String key) {
-        if (System.getProperty(key) == null){
+    protected void verifySystemProp(String key) {
+        if (System.getProperty(key) == null) {
             throw new RuntimeException("required system property " + key
-                    + " has not been set.");
+                                       + " has not been set.");
         }
     }
 

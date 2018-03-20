@@ -32,9 +32,8 @@ public class UserFinderUtil {
 
     /**
      * Retrieves the users associated with the account
-     * 
+     *
      * @param account for which users should be gathered
-
      * @return the set of users associated with an account
      */
     public Set<DuracloudUser> getAccountUsers(AccountInfo account) {
@@ -54,7 +53,7 @@ public class UserFinderUtil {
             user.setAccountRights(accountOnlyRightsSet);
             users.add(user);
         }
-        
+
         List<DuracloudUser> rootUsers =
             repoMgr.getUserRepo()
                    .findByRootTrueAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue();
@@ -62,9 +61,10 @@ public class UserFinderUtil {
         users.addAll(rootUsers);
         return users;
     }
-    
+
     public Set<SecurityUserBean> convertDuracloudUsersToSecurityUserBeans(AccountInfo accountInfo,
-            Set<DuracloudUser> users, boolean includeRootUsers) {
+                                                                          Set<DuracloudUser> users,
+                                                                          boolean includeRootUsers) {
         // collect groups for the account
         Long accountId = accountInfo.getId();
         DuracloudGroupRepo groupRepo = repoMgr.getGroupRepo();
@@ -80,11 +80,11 @@ public class UserFinderUtil {
             String ipLimits = annotateAddressRange(accountInfo, user.getAllowableIPAddressRange());
             Set<Role> roles = user.getRolesByAcct(accountId);
 
-            if(roles == null) {
+            if (roles == null) {
                 roles = new HashSet<Role>();
             }
 
-            if(roles.isEmpty()) {
+            if (roles.isEmpty()) {
                 roles.add(Role.ROLE_USER);
             }
 
@@ -93,16 +93,16 @@ public class UserFinderUtil {
                 grants.add(role.name());
             }
 
-            if(!user.isRoot() || includeRootUsers) {
+            if (!user.isRoot() || includeRootUsers) {
                 SecurityUserBean bean =
-                        new SecurityUserBean(username, password, grants);
+                    new SecurityUserBean(username, password, grants);
                 bean.setEmail(email);
                 bean.setIpLimits(ipLimits);
 
-                if(groups != null) {
+                if (groups != null) {
                     for (DuracloudGroup group : groups) {
                         Set<DuracloudUser> grpUsers = group.getUsers();
-                        if(grpUsers.contains(user)) {
+                        if (grpUsers.contains(user)) {
                             bean.addGroup(group.getName());
                         }
                     }
@@ -112,7 +112,7 @@ public class UserFinderUtil {
             }
         }
         return userBeans;
-    } 
+    }
 
     /**
      * For a user account with an IP limitation, this method is used to update
@@ -124,7 +124,7 @@ public class UserFinderUtil {
      * @return baseRange plus the instance elastic IP, or null if baseRange is null
      */
     private String annotateAddressRange(AccountInfo accountInfo, String baseRange) {
-        if(null == baseRange || baseRange.equals("")) {
+        if (null == baseRange || baseRange.equals("")) {
             return baseRange;
         } else {
             return baseRange; // delimeter + elasticIp + "/32";

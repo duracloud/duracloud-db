@@ -9,7 +9,7 @@ package org.duracloud.mill.auditor;
 
 /**
  * @author Daniel Bernstein
- *         March 11, 2014
+ * March 11, 2014
  */
 public class AuditLogWriteFailedException extends Exception {
 

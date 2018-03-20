@@ -15,7 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/10/13
+ * Date: 7/10/13
  */
 public enum Role {
     ROLE_INIT("Init"),
@@ -46,18 +46,25 @@ public enum Role {
         switch (this) {
             case ROLE_ROOT:
                 hierarchy.add(ROLE_ROOT);
+                // fall through
             case ROLE_OWNER:
                 hierarchy.add(ROLE_OWNER);
+                // fall through
             case ROLE_ADMIN:
                 hierarchy.add(ROLE_ADMIN);
+                // fall through
             case ROLE_USER:
                 hierarchy.add(ROLE_USER);
+                // fall through
             case ROLE_ANONYMOUS:
                 hierarchy.add(ROLE_ANONYMOUS);
                 break;
             case ROLE_INIT:
                 // not in hierarchy
                 hierarchy.add(ROLE_INIT);
+                break;
+            default:
+                break;
         }
 
         return hierarchy;

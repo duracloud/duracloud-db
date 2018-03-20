@@ -13,9 +13,9 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Daniel Bernstein
- *         Date: 05/06/2015
+ * Date: 05/06/2015
  */
-@Repository(value="globalPropertiesRepo")
+@Repository(value = "globalPropertiesRepo")
 public interface GlobalPropertiesRepo extends JpaRepository<GlobalProperties, Long> {
-    
+
 }

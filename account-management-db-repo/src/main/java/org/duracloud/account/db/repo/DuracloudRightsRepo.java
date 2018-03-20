@@ -7,18 +7,18 @@
  */
 package org.duracloud.account.db.repo;
 
+import java.util.List;
+
 import org.duracloud.account.db.model.AccountRights;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * @author Erik Paulsson
- *         Date: 7/8/13
+ * Date: 7/8/13
  */
-@Repository(value="rightsRepo")
-public interface DuracloudRightsRepo extends JpaRepository<AccountRights, Long>{
+@Repository(value = "rightsRepo")
+public interface DuracloudRightsRepo extends JpaRepository<AccountRights, Long> {
 
     /**
      * This method returns the set of rights for a given account
@@ -46,7 +46,6 @@ public interface DuracloudRightsRepo extends JpaRepository<AccountRights, Long>{
      * @return rights
      */
     public AccountRights findByAccountIdAndUserId(Long accountId,
-                                              Long userId);
-
+                                                  Long userId);
 
 }

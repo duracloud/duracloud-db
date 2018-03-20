@@ -18,9 +18,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.duracloud.common.db.error.NotFoundException;
 import org.duracloud.mill.auditor.AuditLogItem;
 import org.duracloud.mill.auditor.AuditLogWriteFailedException;
-import org.duracloud.common.db.error.NotFoundException;
 import org.duracloud.mill.db.model.JpaAuditLogItem;
 import org.duracloud.mill.db.repo.JpaAuditLogItemRepo;
 import org.duracloud.mill.test.jpa.JpaTestBase;
@@ -32,47 +32,48 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * @author Daniel Bernstein
- *         Date: Aug 29, 2014
+ * Date: Aug 29, 2014
  */
-public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem>{
+public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem> {
 
     private JpaAuditLogStore auditLogStore;
-    
+
     @Mock
     private JpaAuditLogItemRepo repo;
-    
+
     private String account = "account";
     private String storeId = "store-id";
     private String spaceId = "space-id";
-    private String contentId= "content-id";
-    private String contentMd5= "content-md5";
+    private String contentId = "content-id";
+    private String contentMd5 = "content-md5";
     private String mimetype = "mime-type";
     private String contentSize = "content-size";
     private String user = "user";
     private String action = "action";
-    private String properties= "{}";
-    private String spaceAcls= "{}";
+    private String properties = "{}";
+    private String spaceAcls = "{}";
     private String sourceSpaceId = "source-space-id";
     private String sourceContentId = "source-content-id";
     private Date timestamp = new Date();
-    
+
     /**
      * Test method for
-     * {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#write(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Date)}
+     * {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#write(java.lang.String, java.lang.String, java.lang
+     * .String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang
+     * .String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Date)}
      * .
-     * @throws AuditLogWriteFailedException 
+     *
+     * @throws AuditLogWriteFailedException
      */
     @Test
     public void testWrite() throws AuditLogWriteFailedException {
 
         Capture<JpaAuditLogItem> jpaItemCapture = new Capture<>();
 
-        
         expect(repo.saveAndFlush(capture(jpaItemCapture)))
-                .andReturn(new JpaAuditLogItem());
-        
-        replayAll();
+            .andReturn(new JpaAuditLogItem());
 
+        replayAll();
 
         this.auditLogStore = new JpaAuditLogStore(repo);
 
@@ -90,9 +91,9 @@ public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem>{
                                  sourceSpaceId,
                                  sourceContentId,
                                  timestamp);
-        
+
         JpaAuditLogItem item = jpaItemCapture.getValue();
-        
+
         assertEquals(item.getAccount(), account);
         assertEquals(item.getSpaceId(), spaceId);
         assertEquals(item.getContentId(), contentId);
@@ -103,14 +104,15 @@ public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem>{
         assertEquals(item.getAction(), action);
         assertEquals(item.getContentProperties(), properties);
         assertEquals(item.getSpaceAcls(), spaceAcls);
-        assertEquals(item.getSourceSpaceId(),sourceSpaceId);
+        assertEquals(item.getSourceSpaceId(), sourceSpaceId);
         assertEquals(item.getSourceContentId(), sourceContentId);
         assertEquals(item.getTimestamp(), timestamp.getTime());
 
     }
 
     /**
-     * Test method for {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#getLogItems(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+     * Test method for
+     * {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#getLogItems(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
      */
     @Test
     public void testGetLogItemsByAccountStoreIdSpaceIdAndContentId() {
@@ -119,45 +121,47 @@ public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem>{
         int count = 10;
 
         Page<JpaAuditLogItem> page = setupPage(count);
-        expect(this.repo
-                .findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByContentIdAsc(eq(account),
-                                                                                  eq(storeId),
-                                                                                  eq(spaceId),
-                                                                                  eq(contentId),
-                                                                                  capture(capture)))
-                .andReturn(page);
+        expect(this.repo.findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByContentIdAsc(eq(account),
+                                                                                          eq(storeId),
+                                                                                          eq(spaceId),
+                                                                                          eq(contentId),
+                                                                                          capture(capture)))
+            .andReturn(page);
         replayAll();
 
         Iterator it = this.auditLogStore.getLogItems(account,
-                                                                   storeId,
-                                                                   spaceId,
-                                                                   contentId);
+                                                     storeId,
+                                                     spaceId,
+                                                     contentId);
         verifyIterator(count, it);
         verifyPageable(capture);
     }
 
     /**
-     * Test method for {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#getLatestLogItem(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
-     * @throws NotFoundException 
+     * Test method for
+     * {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#getLatestLogItem(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+     *
+     * @throws NotFoundException
      */
     @Test
     public void testGetLatestLogItem() throws NotFoundException {
         this.auditLogStore = new JpaAuditLogStore(repo);
-        expect(repo
-                .findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByTimestampDesc(account,
-                                                                                   storeId,
-                                                                                   spaceId,
-                                                                                   contentId))
-                .andReturn(Arrays.asList(new JpaAuditLogItem[] { new JpaAuditLogItem() }));
+        expect(repo.findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByTimestampDesc(account,
+                                                                                      storeId,
+                                                                                      spaceId,
+                                                                                      contentId))
+            .andReturn(Arrays.asList(new JpaAuditLogItem[] {new JpaAuditLogItem()}));
         replayAll();
         AuditLogItem item = this.auditLogStore.getLatestLogItem(account, storeId, spaceId, contentId);
         assertNotNull(item);
-        
+
     }
 
     /**
-     * Test method for {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#updateProperties(org.duracloud.audit.AuditLogItem, java.lang.String)}.
-     * @throws AuditLogWriteFailedException 
+     * Test method for
+     * {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#updateProperties(org.duracloud.mill.auditor.AuditLogItem, java.lang.String)}.
+     *
+     * @throws AuditLogWriteFailedException
      */
     @Test
     public void testUpdateProperties() throws AuditLogWriteFailedException {
@@ -166,18 +170,16 @@ public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem>{
         Long id = 100l;
         item.setId(id);
         String serializedProps = "{}";
-        
+
         JpaAuditLogItem freshItem = createMock(JpaAuditLogItem.class);
         expect(repo.findOne(eq(id))).andReturn(freshItem);
         freshItem.setContentProperties(serializedProps);
         expectLastCall().once();
         expect(repo.saveAndFlush(freshItem)).andReturn(freshItem);
         replayAll();
-        
+
         this.auditLogStore.updateProperties(item, serializedProps);
-        
-        
-        
+
     }
 
     /* (non-Javadoc)

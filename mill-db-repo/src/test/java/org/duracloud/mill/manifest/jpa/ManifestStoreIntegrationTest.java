@@ -24,10 +24,11 @@ import org.junit.Test;
 /**
  * This test class runs tests against a live embedded mysql database.
  * While the JpaManifestStoreTest covers similar territory, we uncovered
- * some bugs connected to underlying JPA storage mechanisms.  This class 
- * was added to verify that the code works against a running database. 
- * @author Daniel Bernstein 
- *         Date: June 8, 2017
+ * some bugs connected to underlying JPA storage mechanisms.  This class
+ * was added to verify that the code works against a running database.
+ *
+ * @author Daniel Bernstein
+ * Date: June 8, 2017
  */
 public class ManifestStoreIntegrationTest extends JpaIntegrationTestBase {
 
@@ -63,8 +64,7 @@ public class ManifestStoreIntegrationTest extends JpaIntegrationTestBase {
     private ManifestItem addAndRetrieveItem(Date timestamp) throws ManifestItemWriteException, NotFoundException {
         ManifestStore store = getStore();
         assertTrue(store.addUpdate(account, storeId, spaceId, contentId, contentChecksum, contentMimetype,
-                contentSize,
-                timestamp));
+                                   contentSize, timestamp));
         ManifestItem item = store.getItem(account, storeId, spaceId, contentId);
         return item;
     }
@@ -86,8 +86,7 @@ public class ManifestStoreIntegrationTest extends JpaIntegrationTestBase {
         long ms999ago = oneSecondAgo + 1;
 
         assertTrue(store.addUpdate(account, storeId, spaceId, contentId, contentChecksum2, contentMimetype2,
-                contentSize2,
-                new Date(ms999ago)));
+                                   contentSize2, new Date(ms999ago)));
 
         // get it
         ManifestItem item2 = store.getItem(account, storeId, spaceId, contentId);
@@ -115,8 +114,7 @@ public class ManifestStoreIntegrationTest extends JpaIntegrationTestBase {
         long pastTime = currentTime - 1;
         String newChecksum = "checksum-2";
         assertFalse(store.addUpdate(account, storeId, spaceId, contentId, newChecksum, contentMimetype,
-                contentSize,
-                new Date(pastTime)));
+                                    contentSize, new Date(pastTime)));
 
         // get it
         ManifestItem item2 = store.getItem(account, storeId, spaceId, contentId);

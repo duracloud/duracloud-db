@@ -6,10 +6,9 @@
  *     http://duracloud.org/license/
  */
 package org.duracloud.reportdata.bitintegrity;
+
 /**
- *
  * @author Daniel Bernstein
- *
  */
 public enum BitIntegrityReportResult {
     SUCCESS,

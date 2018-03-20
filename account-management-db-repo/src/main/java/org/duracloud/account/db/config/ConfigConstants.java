@@ -6,12 +6,16 @@
  *     http://duracloud.org/license/
  */
 package org.duracloud.account.db.config;
+
 /**
- * 
  * @author Daniel Bernstein
- *
  */
 public class ConfigConstants {
+
+    private ConfigConstants() {
+        // Ensures class is not instantiated, as only static values exist
+    }
+
     public static final String MC_DB_NAME = "db.name";
     public static final String MC_DB_HOST = "db.host";
     public static final String MC_DB_PORT = "db.port";

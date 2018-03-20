@@ -7,22 +7,21 @@
  */
 package org.duracloud.account.db.model.util;
 
+import java.util.Set;
+
 import org.duracloud.account.db.model.AccountInfo;
 import org.duracloud.account.db.model.InstanceType;
 import org.duracloud.account.db.model.Role;
 
-import java.util.Set;
-
 public class DuracloudAccount implements Comparable<DuracloudAccount> {
     private AccountInfo accountInfo;
-
 
     private String instanceStatus;
 
     private String instanceVersion;
 
     private InstanceType instanceType;
-    
+
     private Set<String> versions;
 
     private Role userRole;
@@ -42,7 +41,6 @@ public class DuracloudAccount implements Comparable<DuracloudAccount> {
     public void setAccountInfo(AccountInfo accountInfo) {
         this.accountInfo = accountInfo;
     }
-
 
     public String getInstanceStatus() {
         return instanceStatus;

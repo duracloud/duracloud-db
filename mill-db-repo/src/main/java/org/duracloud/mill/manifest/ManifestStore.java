@@ -13,10 +13,9 @@ import java.util.Iterator;
 import org.duracloud.common.db.error.NotFoundException;
 import org.duracloud.mill.db.model.ManifestItem;
 
-
 /**
  * @author Daniel Bernstein
- *         Date: Sep 2, 2014
+ * Date: Sep 2, 2014
  */
 public interface ManifestStore {
 
@@ -26,20 +25,20 @@ public interface ManifestStore {
      * @param spaceId
      * @param contentId
      * @param contentChecksum
-     * @param contentSize 
-     * @param contentMimetype 
-     * @param timeStamp 
-     * @throws ManifestItemWriteException
+     * @param contentSize
+     * @param contentMimetype
+     * @param timeStamp
      * @return true if the store was updated;  false if it was not (due to the update being out of order).
+     * @throws ManifestItemWriteException
      */
     public boolean addUpdate(String account,
-             String storeId,
-             String spaceId,
-             String contentId,
-             String contentChecksum,
-             String contentMimetype,
-             String contentSize, 
-             Date timeStamp) throws ManifestItemWriteException;
+                             String storeId,
+                             String spaceId,
+                             String contentId,
+                             String contentChecksum,
+                             String contentMimetype,
+                             String contentSize,
+                             Date timeStamp) throws ManifestItemWriteException;
 
     /**
      * @param storeId
@@ -52,6 +51,7 @@ public interface ManifestStore {
 
     /**
      * Provides a method or ordering the results
+     *
      * @param account
      * @param storeId
      * @param spaceId
@@ -64,7 +64,6 @@ public interface ManifestStore {
                                            boolean ordered);
 
     /**
-     * 
      * @param account
      * @param storeId
      * @param spaceId
@@ -73,9 +72,9 @@ public interface ManifestStore {
      * @throws NotFoundException
      */
     public ManifestItem getItem(String account,
-                         String storeId,
-                         String spaceId,
-                         String contentId) throws NotFoundException;
+                                String storeId,
+                                String spaceId,
+                                String contentId) throws NotFoundException;
 
     /**
      * @param account
@@ -83,39 +82,36 @@ public interface ManifestStore {
      * @param spaceId
      * @param contentId
      * @param eventTimestamp
-     * @throws ManifestItemWriteException 
      * @return true if the store was updated;  false if it was not (due to the update being out of order).
+     * @throws ManifestItemWriteException
      */
     public boolean flagAsDeleted(String account,
-                       String storeId,
-                       String spaceId,
-                       String contentId,
-                       Date eventTimestamp) throws ManifestItemWriteException;
-    
+                                 String storeId,
+                                 String spaceId,
+                                 String contentId,
+                                 Date eventTimestamp) throws ManifestItemWriteException;
+
     /**
-     * 
      * @param expiration
      * @return Count of items deleted.
      */
     public int purgeDeletedItemsBefore(Date expiration);
 
     /**
-     * 
      * @param account
      * @param storeId
      * @param spaceId
      * @param contentId
      * @param flag
-     * @throws ManifestItemWriteException 
+     * @throws ManifestItemWriteException
      */
     public void updateMissingFromStorageProviderFlag(String account,
-                                              String storeId,
-                                              String spaceId,
-                                              String contentId,
-                                              boolean flag) throws ManifestItemWriteException;
+                                                     String storeId,
+                                                     String spaceId,
+                                                     String contentId,
+                                                     boolean flag) throws ManifestItemWriteException;
 
     /**
-     * 
      * @param account
      * @param storeId
      * @param spaceId

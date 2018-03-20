@@ -7,24 +7,24 @@
  */
 package org.duracloud.account.db.repo;
 
+import java.util.List;
+
 import org.duracloud.account.db.model.DuracloudGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * @author Erik Paulsson
- *         Date: 7/8/13
+ * Date: 7/8/13
  */
-@Repository(value="groupRepo")
+@Repository(value = "groupRepo")
 public interface DuracloudGroupRepo extends JpaRepository<DuracloudGroup, Long> {
 
     /**
      * This method returns a single group within the given account, with the
      * given groupname.
      *
-     * @param name of group
+     * @param name      of group
      * @param accountId associated with group
      * @return group
      */

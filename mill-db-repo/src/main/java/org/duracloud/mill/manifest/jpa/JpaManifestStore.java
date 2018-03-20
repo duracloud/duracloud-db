@@ -28,12 +28,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
  * @author Daniel Bernstein
- * 
  */
-public class JpaManifestStore implements
-                             ManifestStore {
+public class JpaManifestStore implements ManifestStore {
     private static Logger log = LoggerFactory.getLogger(JpaManifestStore.class);
     private JpaManifestItemRepo manifestItemRepo;
 
@@ -45,71 +42,68 @@ public class JpaManifestStore implements
     @Override
     @Transactional(value = MillJpaRepoConfig.TRANSACTION_MANAGER_BEAN, propagation = Propagation.REQUIRES_NEW)
     public boolean addUpdate(String account,
-                      String storeId,
-                      String spaceId,
-                      String contentId,
-                      String contentChecksum,
-                      String contentMimetype,
-                      String contentSize,
-                      Date eventTimestamp) throws ManifestItemWriteException {
+                             String storeId,
+                             String spaceId,
+                             String contentId,
+                             String contentChecksum,
+                             String contentMimetype,
+                             String contentSize,
+                             Date eventTimestamp) throws ManifestItemWriteException {
 
-        if(log.isDebugEnabled()){
+        if (log.isDebugEnabled()) {
             log.debug("preparing to write account={}, " +
-                    "storeId={}, " +
-                    "spaceId={}, " +
-                    "contentId={}, " +
-                    "contentChecksum={}, " +
-                    "contentMimetype={}, " +
-                    "contentSize={}, " +
-                    "eventTimestamp={}",
-              account,
-              storeId,
-              spaceId,
-              contentId,
-              contentChecksum,
-              contentMimetype,
-              contentSize,
-              eventTimestamp);
+                      "storeId={}, " +
+                      "spaceId={}, " +
+                      "contentId={}, " +
+                      "contentChecksum={}, " +
+                      "contentMimetype={}, " +
+                      "contentSize={}, " +
+                      "eventTimestamp={}",
+                      account,
+                      storeId,
+                      spaceId,
+                      contentId,
+                      contentChecksum,
+                      contentMimetype,
+                      contentSize,
+                      eventTimestamp);
         }
-        
+
         try {
-            
+
             boolean save = false;
-            
+
             ManifestItem item = this.manifestItemRepo
-                    .findByAccountAndStoreIdAndSpaceIdAndContentId(account,
-                                                                   storeId,
-                                                                   spaceId,
-                                                                   contentId);
+                .findByAccountAndStoreIdAndSpaceIdAndContentId(account, storeId, spaceId, contentId);
             String action = "added";
-            
-            if(item != null){
-                if(eventOutOfOrder(item, eventTimestamp)){
+
+            if (item != null) {
+                if (eventOutOfOrder(item, eventTimestamp)) {
                     return false;
                 }
 
                 //flip deleted flag if set to deleted
-                if(item.isDeleted()){
+                if (item.isDeleted()) {
                     item.setDeleted(false);
                 }
                 String oldChecksum = item.getContentChecksum();
-                if(!oldChecksum.equals(contentChecksum)){
+                if (!oldChecksum.equals(contentChecksum)) {
                     log.info("content checksum changed from {} to {}", oldChecksum, contentChecksum);
                 }
 
                 String oldMimetype = item.getContentMimetype();
-                if(!oldMimetype.equals(contentMimetype)){
+                if (!oldMimetype.equals(contentMimetype)) {
                     log.info("content mimetype changed from {} to {}", oldMimetype, contentMimetype);
                 }
 
                 String oldSize = item.getContentSize();
-                if(!oldSize.equals(contentSize)){
+                if (!oldSize.equals(contentSize)) {
                     log.info("content size changed from {} to {}", oldMimetype, contentSize);
                 }
 
                 action = "updated";
 
-            }else{
+            } else {
                 item = new ManifestItem();
                 item.setAccount(account);
                 item.setStoreId(storeId);
@@ -130,47 +124,48 @@ public class JpaManifestStore implements
             throw new ManifestItemWriteException(message, ex);
         }
     }
-    
+
     /* (non-Javadoc)
-     * @see org.duracloud.mill.manifest.ManifestStore#flagAsDeleted(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     * @see org.duracloud.mill.manifest.ManifestStore#flagAsDeleted(java.lang.String, java.lang.String, java.lang
+     * .String, java.lang.String)
      */
     @Override
     @Transactional(value = MillJpaRepoConfig.TRANSACTION_MANAGER_BEAN, propagation = Propagation.REQUIRES_NEW)
     public boolean flagAsDeleted(String account,
-                              String storeId,
-                              String spaceId,
-                              String contentId,
-                              Date eventTimestamp) throws ManifestItemWriteException {
+                                 String storeId,
+                                 String spaceId,
+                                 String contentId,
+                                 Date eventTimestamp) throws ManifestItemWriteException {
         try {
-            
+
             ManifestItem item = this.manifestItemRepo
-                    .findByAccountAndStoreIdAndSpaceIdAndContentId(account,
-                                                                   storeId,
-                                                                   spaceId,
-                                                                   contentId);
-            
-            if(item != null){
-                if(eventOutOfOrder(item, eventTimestamp)){
+                .findByAccountAndStoreIdAndSpaceIdAndContentId(account,
+                                                               storeId,
+                                                               spaceId,
+                                                               contentId);
+
+            if (item != null) {
+                if (eventOutOfOrder(item, eventTimestamp)) {
                     return false;
                 }
-                
-                if(item.isDeleted()){
+
+                if (item.isDeleted()) {
                     log.warn("item {}/{}/{}/{} has already been deleted - " +
-                    		"there appears to have been a duplicate event " +
-                    		"or possibly a missed content add event - ignoring...", 
+                             "there appears to have been a duplicate event " +
+                             "or possibly a missed content add event - ignoring...",
                              account,
                              storeId,
                              spaceId,
                              contentId);
-                    
+
                 }
-            }else{
-                log.warn("no manifest item {}/{}/{}/{} : nothing to delete - adding deleted manifest entry...", 
-                          account,
-                          storeId,
-                          spaceId,
-                          contentId);
-                
+            } else {
+                log.warn("no manifest item {}/{}/{}/{} : nothing to delete - adding deleted manifest entry...",
+                         account,
+                         storeId,
+                         spaceId,
+                         contentId);
+
                 item = new ManifestItem();
                 item.setAccount(account);
                 item.setStoreId(storeId);
@@ -190,7 +185,7 @@ public class JpaManifestStore implements
             String message = "failed to flag item as deleted item: " + ex.getMessage();
             log.error(message);
             throw new ManifestItemWriteException(message, ex);
-        }        
+        }
     }
 
     /**
@@ -201,16 +196,16 @@ public class JpaManifestStore implements
     private boolean eventOutOfOrder(ManifestItem item, Date eventTimestamp) {
         long itemTime = item.getModified().getTime();
         long eventTime = eventTimestamp.getTime();
-        
-        if(eventTime < itemTime){
+
+        if (eventTime < itemTime) {
             log.warn("The current database item is more " +
                      "current that the event: item last modified: " +
                      "{}, event timestamp: {}. Likely cause: events " +
-                     "were delivered out of order. Ignoring...", 
-                     itemTime, 
+                     "were delivered out of order. Ignoring...",
+                     itemTime,
                      eventTime);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -221,87 +216,84 @@ public class JpaManifestStore implements
                                            final String spaceId) {
         return getItems(account, storeId, spaceId, false);
     }
-    
+
     @Override
     public Iterator<ManifestItem> getItems(final String account,
                                            final String storeId,
-                                           final String spaceId, 
-					   final boolean ordered) {
-    	
-    	if(ordered){
-        	return getItemsOrdered(account, storeId, spaceId);
-    	}else{
-    		return getItemsUnordered(account,storeId, spaceId);
-    	}
+                                           final String spaceId,
+                                           final boolean ordered) {
+
+        if (ordered) {
+            return getItemsOrdered(account, storeId, spaceId);
+        } else {
+            return getItemsUnordered(account, storeId, spaceId);
+        }
 
     }
 
-	private Iterator<ManifestItem> getItemsOrdered(final String account, final String storeId, final String spaceId) {
-		JpaIteratorSource<JpaManifestItemRepo, ManifestItem> source =
-		        new JpaIteratorSource<JpaManifestItemRepo, ManifestItem>(this.manifestItemRepo, 10000) {
-		            @Override
-		            protected Page<ManifestItem> getNextPage(Pageable pageable,
-		                                                     JpaManifestItemRepo repo) {
-		                
-		                    return manifestItemRepo
-		                        .findByAccountAndStoreIdAndSpaceIdAndDeletedFalseOrderByContentIdAsc(account,
-		                                                                                   storeId,
-		                                                                                   spaceId,
-		                                                                                   pageable);
-		            }
-		        };
-	    return (Iterator<ManifestItem>) new StreamingIterator<ManifestItem>(source);
-	}
+    private Iterator<ManifestItem> getItemsOrdered(final String account, final String storeId, final String spaceId) {
+        JpaIteratorSource<JpaManifestItemRepo, ManifestItem> source =
+            new JpaIteratorSource<JpaManifestItemRepo, ManifestItem>(this.manifestItemRepo, 10000) {
+                @Override
+                protected Page<ManifestItem> getNextPage(Pageable pageable,
+                                                         JpaManifestItemRepo repo) {
+                    return manifestItemRepo
+                        .findByAccountAndStoreIdAndSpaceIdAndDeletedFalseOrderByContentIdAsc(account,
+                                                                                             storeId,
+                                                                                             spaceId,
+                                                                                             pageable);
+                }
+            };
+        return (Iterator<ManifestItem>) new StreamingIterator<ManifestItem>(source);
+    }
 
-	/**
-	 * 
-	 * @param account
-	 * @param storeId
-	 * @param spaceId
-	 * @return
-	 */
+    /**
+     * @param account
+     * @param storeId
+     * @param spaceId
+     * @return
+     */
     private Iterator<ManifestItem> getItemsUnordered(final String account,
-                                           final String storeId,
-                                           final String spaceId) {
-		return  new StreamingIterator<ManifestItem>(
-					new ManifestItemIteratorSource(this.manifestItemRepo, 
-												   account, 
-												   storeId, 
-												   spaceId, 
-												   10000));
+                                                     final String storeId,
+                                                     final String spaceId) {
+        return new StreamingIterator<ManifestItem>(
+            new ManifestItemIteratorSource(this.manifestItemRepo,
+                                           account,
+                                           storeId,
+                                           spaceId,
+                                           10000));
     }
-    
+
     @Override
-    public ManifestItem
-            getItem(final String account,
-                    final String storeId,
-                    final String spaceId,
-                    final String contentId) throws NotFoundException {
+    public ManifestItem getItem(final String account,
+                                final String storeId,
+                                final String spaceId,
+                                final String contentId) throws NotFoundException {
         ManifestItem item = this.manifestItemRepo
-                .findByAccountAndStoreIdAndSpaceIdAndContentId(account,
-                                                               storeId,
-                                                               spaceId,
-                                                               contentId);
+            .findByAccountAndStoreIdAndSpaceIdAndContentId(account,
+                                                           storeId,
+                                                           spaceId,
+                                                           contentId);
         if (item == null) {
-            throw new NotFoundException(MessageFormat.format("No ManifestItem could be found matching the specified params: " +
-            		                                     "account={0}, storeId={1}, spaceId={2}, contentId={3}",
-                                                             account,
-                                                             storeId,
-                                                             spaceId,
-                                                             contentId));
+            throw new NotFoundException(
+                MessageFormat.format("No ManifestItem could be found matching the specified params: " +
+                                     "account={0}, storeId={1}, spaceId={2}, contentId={3}",
+                                     account,
+                                     storeId,
+                                     spaceId,
+                                     contentId));
         }
 
         return item;
     }
 
-    
     /* (non-Javadoc)
      * @see org.duracloud.mill.manifest.ManifestStore#purgeDeletedItemsBefore(java.util.Date)
      */
     @Override
     @Transactional(value = MillJpaRepoConfig.TRANSACTION_MANAGER_BEAN, propagation = Propagation.REQUIRES_NEW)
     public int purgeDeletedItemsBefore(Date expiration) {
-       return this.manifestItemRepo.deleteFirst50000ByDeletedTrueAndModifiedBefore(expiration);
+        return this.manifestItemRepo.deleteFirst50000ByDeletedTrueAndModifiedBefore(expiration);
     }
 
     @Override
@@ -311,27 +303,25 @@ public class JpaManifestStore implements
                                                      String spaceId,
                                                      String contentId,
                                                      boolean flag) throws ManifestItemWriteException {
-        
+
         try {
-            
+
             ManifestItem item = this.manifestItemRepo
-                    .findByAccountAndStoreIdAndSpaceIdAndContentId(account,
-                                                                   storeId,
-                                                                   spaceId,
-                                                                   contentId);
-            
-            if(item != null){
-                
+                .findByAccountAndStoreIdAndSpaceIdAndContentId(account,
+                                                               storeId,
+                                                               spaceId,
+                                                               contentId);
+
+            if (item != null) {
                 item.setMissingFromStorageProvider(flag);
                 ManifestItem result = this.manifestItemRepo.saveAndFlush(item);
                 log.info("successfully processed update MissingFromStorageProvider flag: {}", result);
-
-            }else{
-                String message = MessageFormat.format("no manifest item found:  {0}/{1}/{2}/{3}: something's amiss.", 
-                                                           account,
-                                                           storeId,
-                                                           spaceId,
-                                                           contentId);
+            } else {
+                String message = MessageFormat.format("no manifest item found:  {0}/{1}/{2}/{3}: something's amiss.",
+                                                      account,
+                                                      storeId,
+                                                      spaceId,
+                                                      contentId);
                 throw new NotFoundException(message);
             }
 
@@ -339,14 +329,14 @@ public class JpaManifestStore implements
             String message = "failed to update manifest item with : " + ex.getMessage();
             log.error(message);
             throw new ManifestItemWriteException(message, ex);
-        }        
+        }
     }
 
     @Override
     @Transactional(value = MillJpaRepoConfig.TRANSACTION_MANAGER_BEAN, propagation = Propagation.REQUIRES_NEW)
     public void delete(String account, String storeId, String spaceId)
         throws ManifestItemWriteException {
-        this.manifestItemRepo.deleteByAccountAndStoreIdAndSpaceId(account,storeId, spaceId);
+        this.manifestItemRepo.deleteByAccountAndStoreIdAndSpaceId(account, storeId, spaceId);
     }
 
 }

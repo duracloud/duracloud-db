@@ -20,8 +20,9 @@ import org.junit.Test;
 
 /**
  * This test class runs tests against a live embedded mysql database.
- * @author Daniel Bernstein 
- *         Date: August 23, 2017
+ *
+ * @author Daniel Bernstein
+ * Date: August 23, 2017
  */
 public class ModelIntegrationTest extends JpaIntegrationTestBase {
 
@@ -33,13 +34,12 @@ public class ModelIntegrationTest extends JpaIntegrationTestBase {
 
     private String contentId = "content-id";
 
-
     @Test
     public void testAddBitReport() throws Exception {
         long oneSecondAgo = System.currentTimeMillis() - 1000;
         Date timestamp = new Date(oneSecondAgo);
         BitIntegrityReport report = new BitIntegrityReport();
-        
+
         report.setAccount(account);
         report.setCompletionDate(timestamp);
         report.setModified(timestamp);
@@ -47,7 +47,7 @@ public class ModelIntegrationTest extends JpaIntegrationTestBase {
         report.setReportSpaceId(spaceId);
         report.setSpaceId(spaceId);
         report.setStoreId(storeId);
-        
+
         report = getRepo().saveAndFlush(report);
         assertEquals(account, report.getAccount());
         assertEquals(storeId, report.getStoreId());
@@ -59,9 +59,6 @@ public class ModelIntegrationTest extends JpaIntegrationTestBase {
 
         assertEquals(timestamp, report.getModified());
     }
-
-
-
 
     private JpaBitIntegrityReportRepo getRepo() {
         return context.getBean(JpaBitIntegrityReportRepo.class);

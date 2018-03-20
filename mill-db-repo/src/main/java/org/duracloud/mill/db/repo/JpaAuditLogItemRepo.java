@@ -17,26 +17,22 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * 
  * @author Daniel Bernstein
- *
  */
-@Repository(value="auditLogItemRepo")
+@Repository(value = "auditLogItemRepo")
 public interface JpaAuditLogItemRepo extends JpaRepository<JpaAuditLogItem, Long> {
 
     public Page<JpaAuditLogItem> findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByContentIdAsc(
-            @Param("account") String account,
-            @Param("storeId") String storeId,
-            @Param("spaceId") String spaceId,
-            @Param("spaceId") String contentId,
-            Pageable pageable);
+        @Param("account") String account,
+        @Param("storeId") String storeId,
+        @Param("spaceId") String spaceId,
+        @Param("spaceId") String contentId,
+        Pageable pageable);
 
-    
     public List<JpaAuditLogItem> findByWrittenFalseOrderByTimestampAsc(Pageable pageable);
-    
-    
+
     public Long deleteByWrittenTrueAndTimestampLessThan(long timestamp);
-    
+
     /**
      * @param account
      * @param storeId
@@ -44,14 +40,13 @@ public interface JpaAuditLogItemRepo extends JpaRepository<JpaAuditLogItem, Long
      * @param contentId
      * @return
      */
-    public List<JpaAuditLogItem>
-            findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByTimestampDesc(String account,
-                                                                              String storeId,
-                                                                              String spaceId,
-                                                                              String contentId);
+    public List<JpaAuditLogItem> findByAccountAndStoreIdAndSpaceIdAndContentIdOrderByTimestampDesc(String account,
+                                                                                                   String storeId,
+                                                                                                   String spaceId,
+                                                                                                   String contentId);
 
     public Page<JpaAuditLogItem> findByAccountAndSpaceIdOrderByTimestampAsc(String account,
-                                                           String spaceId,
-                                                           Pageable pageable);
+                                                                            String spaceId,
+                                                                            Pageable pageable);
 
 }

@@ -7,10 +7,9 @@
  */
 package org.duracloud.mill.manifest;
 
-
 /**
  * @author Daniel Bernstein
- *         Date: Sep 2, 2014
+ * Date: Sep 2, 2014
  */
 public class ManifestItemWriteException extends Exception {
     /**
@@ -18,7 +17,7 @@ public class ManifestItemWriteException extends Exception {
      * @param ex
      */
     public ManifestItemWriteException(String message, Exception ex) {
-        super(message,ex);
+        super(message, ex);
     }
-    
+
 }

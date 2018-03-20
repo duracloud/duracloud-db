@@ -12,12 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
  * @author Daniel Bernstein
- * 
  */
 @Repository(value = "bitIntegrityReportRepo")
 public interface JpaBitIntegrityReportRepo
@@ -30,13 +27,11 @@ public interface JpaBitIntegrityReportRepo
      * @return
      */
 
-    Page<BitIntegrityReport>
-        findByStoreIdAndSpaceIdAndDisplayTrueOrderByCompletionDateDesc(String storeId,
-                                                                       String spaceId,
-                                                                       Pageable pageable);
+    Page<BitIntegrityReport> findByStoreIdAndSpaceIdAndDisplayTrueOrderByCompletionDateDesc(String storeId,
+                                                                                            String spaceId,
+                                                                                            Pageable pageable);
 
     /**
-     * 
      * @param account
      * @param storeId
      * @param spaceId

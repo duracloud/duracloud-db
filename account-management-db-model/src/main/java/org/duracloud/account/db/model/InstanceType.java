@@ -11,7 +11,6 @@ package org.duracloud.account.db.model;
  * Represents different instance sizes available on which to deploy duracloud.
  *
  * @author Daniel Bernstein
- *
  */
 public enum InstanceType {
     SMALL,

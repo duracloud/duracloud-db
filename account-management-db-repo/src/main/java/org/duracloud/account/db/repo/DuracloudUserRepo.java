@@ -15,9 +15,9 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/3/13
+ * Date: 7/3/13
  */
-@Repository(value="userRepo")
+@Repository(value = "userRepo")
 public interface DuracloudUserRepo extends JpaRepository<DuracloudUser, Long> {
 
     /**
@@ -27,10 +27,12 @@ public interface DuracloudUserRepo extends JpaRepository<DuracloudUser, Long> {
      * @return user
      */
     public DuracloudUser findByUsername(String username);
-    
+
     /**
-     * Returns all enabled, non-locked root users with non-expired credentials. 
+     * Returns all enabled, non-locked root users with non-expired credentials.
+     *
      * @return
      */
-    public List<DuracloudUser> findByRootTrueAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue();
+    public List<DuracloudUser>
+        findByRootTrueAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue();
 }

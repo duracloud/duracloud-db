@@ -8,7 +8,6 @@
 package org.duracloud.account.db.model;
 
 import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -18,7 +17,7 @@ import javax.persistence.ManyToOne;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/10/13
+ * Date: 7/10/13
  */
 @Entity
 public class DuracloudGroup extends BaseEntity {
@@ -28,14 +27,16 @@ public class DuracloudGroup extends BaseEntity {
 
     private String name;
 
-    @ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name="group_user",
-        joinColumns=@JoinColumn(name="group_id", referencedColumnName="id", columnDefinition = "bigint(20)"),
-        inverseJoinColumns=@JoinColumn(name="user_id", referencedColumnName="id", columnDefinition = "bigint(20)"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "group_user",
+               joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id",
+                                         columnDefinition = "bigint(20)"),
+               inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id",
+                                                columnDefinition = "bigint(20)"))
     private Set<DuracloudUser> users;
 
-    @ManyToOne(fetch=FetchType.LAZY, optional=false)
-    @JoinColumn(name="account_id", nullable=false, columnDefinition = "bigint(20)")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "account_id", nullable = false, columnDefinition = "bigint(20)")
     private AccountInfo account;
 
     public String getName() {
@@ -45,9 +46,9 @@ public class DuracloudGroup extends BaseEntity {
     public void setName(String name) {
         this.name = name;
     }
-    
-    public String getPrettyName(){
-        return this.name.substring(this.name.indexOf(PREFIX)+PREFIX.length());
+
+    public String getPrettyName() {
+        return this.name.substring(this.name.indexOf(PREFIX) + PREFIX.length());
     }
 
     public Set<DuracloudUser> getUsers() {

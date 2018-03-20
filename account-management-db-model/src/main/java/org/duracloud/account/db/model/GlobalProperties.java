@@ -12,32 +12,32 @@ import javax.persistence.Entity;
 
 /**
  * A grab bag of global properties.
+ *
  * @author Daniel Bernstein
- *         Date: 01/05/2016
+ * Date: 01/05/2016
  */
 @Entity
 public class GlobalProperties extends BaseEntity {
     /*
      * an SNS topic arn for sending noticiations to the instances
      */
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String instanceNotificationTopicArn;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String cloudFrontAccountId;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String cloudFrontKeyId;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String cloudFrontKeyPath;
 
     public String getInstanceNotificationTopicArn() {
         return instanceNotificationTopicArn;
     }
 
-    public void setInstanceNotificationTopicArn(
-            String instanceNotificationTopicArn) {
+    public void setInstanceNotificationTopicArn(String instanceNotificationTopicArn) {
         this.instanceNotificationTopicArn = instanceNotificationTopicArn;
     }
 
@@ -63,6 +63,6 @@ public class GlobalProperties extends BaseEntity {
 
     public void setCloudFrontKeyPath(String cloudFrontKeyPath) {
         this.cloudFrontKeyPath = cloudFrontKeyPath;
-    }   
-    
+    }
+
 }

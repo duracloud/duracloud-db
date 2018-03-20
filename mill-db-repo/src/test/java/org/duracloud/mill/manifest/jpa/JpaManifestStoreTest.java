@@ -28,7 +28,6 @@ import org.easymock.Capture;
 import org.easymock.Mock;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.data.domain.Pageable;
 
 /**
  * @author Daniel Bernstein Date: Sep 2, 2014
@@ -51,7 +50,7 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
      * Test method for
      * {@link org.duracloud.mill.manifest.jpa.JpaManifestStore#add(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}
      * .
-     * 
+     *
      * @throws ManifestItemWriteException
      */
     @Test
@@ -67,13 +66,13 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
         replayAll();
         Date timestamp = new Date();
         assertTrue(store.addUpdate(account,
-                        storeId,
-                        spaceId,
-                        contentId,
-                        contentChecksum,
-                        contentMimetype,
-                        contentSize,
-                        timestamp));
+                                   storeId,
+                                   spaceId,
+                                   contentId,
+                                   contentChecksum,
+                                   contentMimetype,
+                                   contentSize,
+                                   timestamp));
         ManifestItem item = capture.getValue();
         assertEquals(account, item.getAccount());
         assertEquals(storeId, item.getStoreId());
@@ -92,7 +91,7 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
         Date timestamp = new Date();
         ManifestItem returnItem = createMock(ManifestItem.class);
         expect(returnItem.getModified()).andReturn(new Date(System.currentTimeMillis() - 1000));
-        
+
         expect(returnItem.getContentChecksum()).andReturn("old checksum");
         returnItem.setContentChecksum(contentChecksum);
         expectLastCall().once();
@@ -118,22 +117,21 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
         expect(repo.saveAndFlush(returnItem)).andReturn(returnItem);
         replayAll();
         assertTrue(store.addUpdate(account,
-                        storeId,
-                        spaceId,
-                        contentId,
-                        contentChecksum,
-                        contentMimetype,
-                        contentSize,
-                        timestamp));
+                                   storeId,
+                                   spaceId,
+                                   contentId,
+                                   contentChecksum,
+                                   contentMimetype,
+                                   contentSize,
+                                   timestamp));
     }
-    
-  
+
     @Test
     public void testIgnoreUpdateDueToOutOfOrderMessage() throws ManifestItemWriteException {
         createTestSubject();
         ManifestItem returnItem = createMock(ManifestItem.class);
         Date present = new Date(System.currentTimeMillis());
-        Date past = new Date(present.getTime()-1);
+        Date past = new Date(present.getTime() - 1);
         expect(returnItem.getModified()).andReturn(present);
 
         expect(this.repo.findByAccountAndStoreIdAndSpaceIdAndContentId(account,
@@ -143,13 +141,13 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
 
         replayAll();
         assertFalse(store.addUpdate(account,
-                        storeId,
-                        spaceId,
-                        contentId,
-                        contentChecksum,
-                        contentMimetype,
-                        contentSize,
-                        past));
+                                    storeId,
+                                    spaceId,
+                                    contentId,
+                                    contentChecksum,
+                                    contentMimetype,
+                                    contentSize,
+                                    past));
     }
 
     @Test
@@ -181,15 +179,15 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
                                                                        storeId,
                                                                        spaceId,
                                                                        contentId)).andReturn(null);
-        Capture<ManifestItem>  itemCapture = new Capture<ManifestItem>();
-        
+        Capture<ManifestItem> itemCapture = new Capture<ManifestItem>();
+
         expect(repo.saveAndFlush(capture(itemCapture))).andReturn(new ManifestItem());
-        
+
         replayAll();
         assertTrue(store.flagAsDeleted(account, storeId, spaceId, contentId, timestamp));
-        
+
         ManifestItem item = itemCapture.getValue();
-        
+
         assertNotNull(item.getContentChecksum());
         assertNotNull(item.getContentMimetype());
         assertNotNull(item.getContentSize());
@@ -205,7 +203,6 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
         store = new JpaManifestStore(repo);
     }
 
-    
     @Test
     public void updateMissingFromStorageProviderFlag() throws ManifestItemWriteException {
         createTestSubject();
@@ -226,9 +223,9 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
     }
 
     @Test
-    public void updateMissingFromStorageProviderFlagNotFound()  {
+    public void updateMissingFromStorageProviderFlagNotFound() {
         createTestSubject();
-        
+
         expect(this.repo.findByAccountAndStoreIdAndSpaceIdAndContentId(account,
                                                                        storeId,
                                                                        spaceId,
@@ -243,6 +240,7 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
                                                        true);
             Assert.fail("expected failure");
         } catch (ManifestItemWriteException e) {
+            // Expected exception
         }
     }
 
@@ -258,24 +256,24 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
         int count = 10;
 
         List<ManifestItem> list = setupList(count);
-    	expect(list.get(count-1).getId()).andReturn((long)count);
-        
+        expect(list.get(count - 1).getId()).andReturn((long) count);
+
         expect(this.repo.getMinId(eq(account), eq(storeId), eq(spaceId))).andReturn(1l);
-        
-        expect(this.repo.findByAccountAndStoreIdAndSpaceIdAndDeletedFalse(eq(account),
-                                                                                   eq(storeId),
-                                                                                   eq(spaceId),
-                                                                                   eq(0l),eq(10000))).andReturn(list);
 
         expect(this.repo.findByAccountAndStoreIdAndSpaceIdAndDeletedFalse(eq(account),
-                eq(storeId),
-                eq(spaceId),
-                eq(10l),
-                eq(10000))).andReturn(null);
+                                                                          eq(storeId),
+                                                                          eq(spaceId),
+                                                                          eq(0l), eq(10000))).andReturn(list);
+
+        expect(this.repo.findByAccountAndStoreIdAndSpaceIdAndDeletedFalse(eq(account),
+                                                                          eq(storeId),
+                                                                          eq(spaceId),
+                                                                          eq(10l),
+                                                                          eq(10000))).andReturn(null);
 
         replayAll();
 
-        Iterator<ManifestItem> it = this.store.getItems(account,storeId, spaceId);
+        Iterator<ManifestItem> it = this.store.getItems(account, storeId, spaceId);
         verifyIterator(count, it);
     }
 
@@ -298,7 +296,7 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.duracloud.mill.test.jpa.JpaTestBase#create()
      */
     @Override

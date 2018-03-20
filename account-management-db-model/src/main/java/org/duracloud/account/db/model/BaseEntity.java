@@ -8,7 +8,6 @@
 package org.duracloud.account.db.model;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,16 +17,15 @@ import javax.persistence.Version;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/10/13
+ * Date: 7/10/13
  */
 @MappedSuperclass
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(columnDefinition="bigint(20) AUTO_INCREMENT")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "bigint(20) AUTO_INCREMENT")
     protected Long id;
-
 
     @Version
     private Date modified;
@@ -50,12 +48,18 @@ public abstract class BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         BaseEntity that = (BaseEntity) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
 
         return true;
     }

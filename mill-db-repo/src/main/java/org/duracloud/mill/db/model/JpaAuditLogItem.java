@@ -18,45 +18,43 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.duracloud.mill.auditor.AuditLogItem;
 
 /**
- * 
  * @author Daniel Bernstein
- *
  */
 @Entity
 @Table(name = "audit_log_item",
-       uniqueConstraints = @UniqueConstraint(columnNames = { "uniqueKey"}))
+       uniqueConstraints = @UniqueConstraint(columnNames = {"uniqueKey"}))
 public class JpaAuditLogItem extends BaseEntity implements AuditLogItem {
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String account;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String storeId;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String spaceId;
-    @Column(length=1024)
+    @Column(length = 1024)
     private String contentId;
     private String contentMd5;
     private String mimetype;
     private String contentSize;
-    @Column(length=2048)
+    @Column(length = 2048)
     private String contentProperties;
-    @Column(length=2048)
+    @Column(length = 2048)
     private String spaceAcls;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String action;
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String username;
     private String sourceSpaceId;
     private String sourceContentId;
     private String uniqueKey;
-    
+
     /*
      * indicates whether or not the item has been written to file.
      */
-    private boolean written = false; 
-    
-    @Column(nullable=false)
+    private boolean written = false;
+
+    @Column(nullable = false)
     private Long timestamp;
-    
+
     @Override
     public String getAccount() {
         return this.account;
@@ -183,14 +181,14 @@ public class JpaAuditLogItem extends BaseEntity implements AuditLogItem {
         this.timestamp = timestamp;
     }
 
-    @Column(columnDefinition="char(32) NOT NULL")
+    @Column(columnDefinition = "char(32) NOT NULL")
     @Access(AccessType.PROPERTY)
     public String getUniqueKey() {
-        if(uniqueKey == null){
+        if (uniqueKey == null) {
             this.uniqueKey = DigestUtils.md5Hex(this.action + "/" + this.account + "/"
-                    + this.storeId + "/" + this.spaceId + "/"
-                    + (this.contentId == null ? " " : this.contentId) + "/"
-                    + this.timestamp);
+                                                + this.storeId + "/" + this.spaceId + "/"
+                                                + (this.contentId == null ? " " : this.contentId) + "/"
+                                                + this.timestamp);
         }
         return uniqueKey;
     }
@@ -206,6 +204,5 @@ public class JpaAuditLogItem extends BaseEntity implements AuditLogItem {
     public void setWritten(boolean written) {
         this.written = written;
     }
-    
-    
+
 }

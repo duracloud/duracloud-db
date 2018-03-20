@@ -7,17 +7,18 @@
  */
 package org.duracloud.account.db.repo;
 
+import java.util.List;
+
 import org.duracloud.account.db.model.AccountInfo;
 import org.duracloud.account.db.model.AccountInfo.AccountStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 /**
  * @author Erik Paulsson
- *         Date: 7/8/13
+ * Date: 7/8/13
  */
-@Repository(value="accountRepo")
+@Repository(value = "accountRepo")
 public interface DuracloudAccountRepo extends JpaRepository<AccountInfo, Long> {
 
     /**
@@ -31,20 +32,18 @@ public interface DuracloudAccountRepo extends JpaRepository<AccountInfo, Long> {
     /**
      * This method returns the account with the given subdomain
      *
-     * @param status 
+     * @param status
      * @return list of account info
      */
     public List<AccountInfo> findByStatus(AccountStatus status);
 
     /**
-     * 
      * @param id
      * @return
      */
     public AccountInfo findByPrimaryStorageProviderAccountId(Long id);
 
     /**
-     * 
      * @param id
      * @return
      */

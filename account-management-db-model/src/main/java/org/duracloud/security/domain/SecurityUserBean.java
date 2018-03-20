@@ -7,14 +7,14 @@
  */
 package org.duracloud.security.domain;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author Andrew Woods
- *         Date: Mar 28, 2010
+ * Date: Mar 28, 2010
  */
 public class SecurityUserBean {
     private String username;
@@ -135,7 +135,7 @@ public class SecurityUserBean {
     }
 
     public void setIpLimits(String ipLimits) {
-        if(!StringUtils.isBlank(ipLimits)) {
+        if (!StringUtils.isBlank(ipLimits)) {
             this.ipLimits = ipLimits;
         }
     }
