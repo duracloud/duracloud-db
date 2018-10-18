@@ -41,6 +41,9 @@ public class StorageProviderAccount extends ProviderAccount {
     @Column(name = "map_value")
     private Map<String, String> properties;
 
+    @Column(name = "writable_by_non_root_user")
+    private boolean writableByNonRootUser = false;
+
     /**
      * The max GBs of storage allowable for the account.
      */
@@ -70,4 +73,11 @@ public class StorageProviderAccount extends ProviderAccount {
         this.storageLimit = storageLimit;
     }
 
+    public boolean isWritableByNonRootUser() {
+        return writableByNonRootUser;
+    }
+
+    public void setWritableByNonRootUser(boolean writableByNonRootUser) {
+        this.writableByNonRootUser = writableByNonRootUser;
+    }
 }
