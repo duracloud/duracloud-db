@@ -42,6 +42,9 @@ public class DuracloudRepoMgr {
     @Autowired
     private DuracloudMillRepo duracloudMillRepo;
 
+    @Autowired
+    private EmailTemplateRepo emailTemplateRepo;
+
     public DuracloudUserRepo getUserRepo() {
         return userRepo;
     }
@@ -66,6 +69,10 @@ public class DuracloudRepoMgr {
         return storageProviderAccountRepo;
     }
 
+    public EmailTemplateRepo getEmailTemplateRepo() {
+        return emailTemplateRepo;
+    }
+
     public Set<JpaRepository> getAllRepos() {
         Set<JpaRepository> repos = new HashSet<>();
         repos.add(userRepo);
@@ -75,6 +82,7 @@ public class DuracloudRepoMgr {
         repos.add(userInvitationRepo);
         repos.add(storageProviderAccountRepo);
         repos.add(duracloudMillRepo);
+        repos.add(emailTemplateRepo);
         return repos;
     }
 
