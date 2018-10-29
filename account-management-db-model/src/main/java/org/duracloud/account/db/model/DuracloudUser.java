@@ -223,6 +223,10 @@ public class DuracloudUser extends BaseEntity implements UserDetails {
         return root;
     }
 
+    public void setRoot(boolean root) {
+        this.root = root;
+    }
+
     public String getAllowableIPAddressRange() {
         return allowableIPAddressRange;
     }
