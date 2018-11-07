@@ -24,6 +24,7 @@ public class EmailTemplate extends BaseEntity {
     public enum Templates {
         USER_CREATED("user-created"),
         PASSWORD_RESET("password-reset"),
+        USER_INVITATION("user-invitation"),
         INVITATION_REDEEMED("invitation-redeemed"),
         USER_ADDED_TO_ACCOUNT("user-added-to-account");
 
