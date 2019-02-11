@@ -11,7 +11,6 @@ public enum StorageProviderType {
     AMAZON_S3("amazon-s3"),
     AMAZON_GLACIER("amazon-glacier"),
     IRODS("irods"),
-    DPN("dpn"),
     CHRONOPOLIS("chronopolis"),
     UNKNOWN("unknown"),
     TEST_RETRY("test-retry"),
