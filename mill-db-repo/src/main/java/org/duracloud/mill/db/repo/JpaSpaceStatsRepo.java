@@ -27,7 +27,7 @@ public interface JpaSpaceStatsRepo extends JpaRepository<SpaceStats, Long> {
 
     @Query(nativeQuery = true,
            value = "select"
-                   + "    unix_timestamp(date_format(min(modified), '%Y-%m-%d 00:00:00')) as modified, "
+                   + "    unix_timestamp(date_format(min(modified), '%Y-%m-%d 23:59:59')) as modified, "
                    + "    account_id,"
                    + "    store_id,"
                    + "    space_id,"
@@ -53,7 +53,7 @@ public interface JpaSpaceStatsRepo extends JpaRepository<SpaceStats, Long> {
 
     @Query(nativeQuery = true,
            value = "select a.modified, a.account_id, a.store_id, sum(a.byte_count), sum(a.object_count) from (select"
-                   + "    unix_timestamp(date_format(min(modified), '%Y-%m-%d 00:00:00')) as modified, "
+                   + "    unix_timestamp(date_format(min(modified), '%Y-%m-%d 23:59:59')) as modified, "
                    + "    account_id,"
                    + "    store_id,"
                    + "    space_id,"
@@ -77,7 +77,7 @@ public interface JpaSpaceStatsRepo extends JpaRepository<SpaceStats, Long> {
 
     @Query(nativeQuery = true,
            value = "select"
-                   + "    unix_timestamp(date_format(min(modified), '%Y-%m-%d 00:00:00')) as modified, "
+                   + "    unix_timestamp(date_format(min(modified), '%Y-%m-%d 23:59:59')) as modified, "
                    + "    account_id,"
                    + "    store_id,"
                    + "    space_id,"
