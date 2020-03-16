@@ -54,9 +54,8 @@ public class UserFinderUtil {
             users.add(user);
         }
 
-        List<DuracloudUser> rootUsers =
-            repoMgr.getUserRepo()
-                   .findByRootTrueAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue();
+        List<DuracloudUser> rootUsers = repoMgr.getUserRepo()
+            .findByRootTrueAndEnabledTrueAndAccountNonExpiredTrueAndCredentialsNonExpiredTrueAndAccountNonLockedTrue();
 
         users.addAll(rootUsers);
         return users;
