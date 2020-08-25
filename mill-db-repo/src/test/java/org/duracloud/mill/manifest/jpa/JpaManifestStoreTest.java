@@ -25,6 +25,7 @@ import org.duracloud.mill.db.repo.JpaManifestItemRepo;
 import org.duracloud.mill.manifest.ManifestItemWriteException;
 import org.duracloud.mill.test.jpa.JpaTestBase;
 import org.easymock.Capture;
+import org.easymock.CaptureType;
 import org.easymock.Mock;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,7 +57,7 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
     @Test
     public void testAdd() throws ManifestItemWriteException {
         createTestSubject();
-        Capture<ManifestItem> capture = new Capture<>();
+        Capture<ManifestItem> capture = Capture.newInstance(CaptureType.FIRST);
         expect(this.repo.findByAccountAndStoreIdAndSpaceIdAndContentId(account,
                                                                        storeId,
                                                                        spaceId,
@@ -179,7 +180,7 @@ public class JpaManifestStoreTest extends JpaTestBase<ManifestItem> {
                                                                        storeId,
                                                                        spaceId,
                                                                        contentId)).andReturn(null);
-        Capture<ManifestItem> itemCapture = new Capture<ManifestItem>();
+        Capture<ManifestItem> itemCapture = Capture.newInstance(CaptureType.FIRST);
 
         expect(repo.saveAndFlush(capture(itemCapture))).andReturn(new ManifestItem());
 

@@ -25,6 +25,7 @@ import org.duracloud.mill.db.model.JpaAuditLogItem;
 import org.duracloud.mill.db.repo.JpaAuditLogItemRepo;
 import org.duracloud.mill.test.jpa.JpaTestBase;
 import org.easymock.Capture;
+import org.easymock.CaptureType;
 import org.easymock.Mock;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
@@ -68,7 +69,7 @@ public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem> {
     @Test
     public void testWrite() throws AuditLogWriteFailedException {
 
-        Capture<JpaAuditLogItem> jpaItemCapture = new Capture<>();
+        Capture<JpaAuditLogItem> jpaItemCapture = Capture.newInstance(CaptureType.FIRST);
 
         expect(repo.saveAndFlush(capture(jpaItemCapture)))
             .andReturn(new JpaAuditLogItem());
@@ -117,7 +118,7 @@ public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem> {
     @Test
     public void testGetLogItemsByAccountStoreIdSpaceIdAndContentId() {
         this.auditLogStore = new JpaAuditLogStore(repo);
-        Capture<Pageable> capture = new Capture<>();
+        Capture<Pageable> capture = Capture.newInstance(CaptureType.FIRST);
         int count = 10;
 
         Page<JpaAuditLogItem> page = setupPage(count);
