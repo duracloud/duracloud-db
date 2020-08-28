@@ -160,6 +160,7 @@
     <mysql.driver.version>5.1.49</mysql.driver.version>
     <slf4j.version>1.7.6</slf4j.version>
     <jaxb.api.version>2.3.1</jaxb.api.version>
+    <jaxb.runtime.version>2.3.3</jaxb.runtime.version>
 
     <skipUTs>false</skipUTs>
     <skipITs>true</skipITs>
@@ -614,6 +615,12 @@
         <groupId>javax.xml.bind</groupId>
         <artifactId>jaxb-api</artifactId>
         <version>${jaxb.api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.glassfish.jaxb</groupId>
+        <artifactId>jaxb-runtime</artifactId>
+        <version>${jaxb.runtime.version}</version>
       </dependency>
 
     </dependencies>
