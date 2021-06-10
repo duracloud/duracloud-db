@@ -1,0 +1,43 @@
+# Continuous Integration Build via GitHub Actions
+name: CI Build
+
+# Run this Build for all pushes / PRs to current branch
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      # Specify memory for Maven
+      MAVEN_OPTS: "-Xmx256M"
+    steps:
+    # Output current build environment
+    - run: echo "This is a CI build of branch ${{ github.ref }} in repository ${{ github.repository }}"
+    - run: echo "This job was triggered by a ${{ github.event_name }} event and is running on a ${{ runner.os }} server"
+
+    # https://github.com/actions/checkout
+    - name: Checkout codebase
+      uses: actions/checkout@v2
+
+    # https://github.com/actions/setup-java
+    - name: Install JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: 11
+        distribution: adopt
+
+    # https://github.com/actions/cache
+    - name: Cache Maven dependencies
+      uses: actions/cache@v2
+      with:
+        # Cache entire ~/.m2/repository
+        path: ~/.m2/repository
+        # Cache key is hash of all pom.xml files. Therefore any changes to POMs will invalidate cache
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-maven-
+
+    - name: Build without tests
+      run: mvn install -DskipTests --batch-mode --no-transfer-progress
+
+    - name: Run unit tests
+      run: mvn test -DskipIntTests
