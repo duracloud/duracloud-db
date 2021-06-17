@@ -38,3 +38,26 @@ jobs:
 
     - name: Build and Run unit tests
       run: mvn clean install --batch-mode
+
+    # https://github.com/marketplace/actions/send-email
+    - name: Send mail
+      if: always()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        # smtp settings
+        server_address: ${{ secrets.SMTP_SERVER_HOST }}
+        server_port: ${{ secrets.SMTP_SERVER_PORT }}
+        username: ${{ secrets.SMTP_USERNAME }}
+        password: ${{ secrets.SMTP_PASSWORD }}
+        secure: true
+        # email subject
+        subject: ${{ github.repository }} CI build result: ${{ job.status }}
+        # email body
+        body: >
+          A CI Build in ${{ github.repository }} was triggerd by a ${{ github.event_name }} event.
+          The result was: ${{ job.status }}
+          More details: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        # to emails (comma-separated string)
+        to: cibuilds@duracloud.org
+        # from email
+        from: notifications@duracloud.org
