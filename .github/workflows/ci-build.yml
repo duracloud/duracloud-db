@@ -51,7 +51,7 @@ jobs:
         password: ${{ secrets.SMTP_PASSWORD }}
         secure: true
         # email subject
-        subject: ${{ github.repository }} CI build result: ${{ job.status }}
+        subject: ${{ github.repository }} CI build with result - ${{ job.status }}
         # email body
         body: >
           A CI Build in ${{ github.repository }} was triggerd by a ${{ github.event_name }} event.
