@@ -41,8 +41,8 @@ jobs:
 
     # https://github.com/marketplace/actions/send-email
     - name: Send result email
-      if: always()
       uses: dawidd6/action-send-mail@v3
+      if: always()
       with:
         # smtp settings
         server_address: ${{ secrets.SMTP_SERVER_HOST }}
@@ -51,13 +51,26 @@ jobs:
         password: ${{ secrets.SMTP_PASSWORD }}
         secure: true
         # email subject
-        subject: ${{ github.repository }} CI build with result - ${{ job.status }}
+        subject: CI build for ${{ github.repository }} result - ${{ job.status }}
         # email body
         body: >
-          A CI Build in ${{ github.repository }} was triggerd by a ${{ github.event_name }} event.
+          A CI Build in ${{ github.repository }} was triggerd by a ${{ github.event_name }} event on
+          branch (or tag) ${{ github.ref }}.
+
           The result was: ${{ job.status }}
-          More details: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          More details are available here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         # to emails (comma-separated string)
         to: cibuilds@duracloud.org
         # from email
-        from: DuraCloud Notifier <notifications@duracloud.org>
+        from: DuraCloud CI Builder <notifications@duracloud.org>
+
+    # https://github.com/marketplace/actions/action-slack
+    - name: Send result slack
+      uses: 8398a7/action-slack@v3
+      if: always()
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
