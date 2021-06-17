@@ -40,7 +40,7 @@ jobs:
       run: mvn clean install --batch-mode
 
     # https://github.com/marketplace/actions/send-email
-    - name: Send mail
+    - name: Send result email
       if: always()
       uses: dawidd6/action-send-mail@v3
       with:
@@ -60,4 +60,4 @@ jobs:
         # to emails (comma-separated string)
         to: cibuilds@duracloud.org
         # from email
-        from: notifications@duracloud.org
+        from: DuraCloud Notifier <notifications@duracloud.org>
