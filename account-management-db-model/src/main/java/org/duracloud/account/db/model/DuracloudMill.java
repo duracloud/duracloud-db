@@ -7,8 +7,12 @@
  */
 package org.duracloud.account.db.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 /**
  * Contains basic configuration information for interacting with the Duracloud Mill.
@@ -35,17 +39,11 @@ public class DuracloudMill extends BaseEntity {
     @Column(nullable = false)
     private String queueType;
     @Column(nullable = true)
-    private String rabbitmqHost;
-    @Column(nullable = true)
-    private Integer rabbitmqPort;
-    @Column(nullable = true)
-    private String rabbitmqVhost;
-    @Column(nullable = true)
     private String rabbitmqExchange;
-    @Column(nullable = true)
-    private String rabbitmqUsername;
-    @Column(nullable = true)
-    private String rabbitmqPassword;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "rabbitmq_config_id", nullable = true)
+    private RabbitmqConfig rabbitmqConfig;
 
     public String getDbName() {
         return dbName;
@@ -111,30 +109,9 @@ public class DuracloudMill extends BaseEntity {
         this.queueType = queueType;
     }
 
-    public String getRabbitmqHost() {
-        return rabbitmqHost;
-    }
-
-    public void setRabbitmqHost(String rabbitmqHost) {
-        this.rabbitmqHost = rabbitmqHost;
-    }
-
-    public Integer getRabbitmqPort() {
-        return rabbitmqPort;
-    }
-
-    public void setRabbitmqPort(Integer rabbitmqPort) {
-        this.rabbitmqPort = rabbitmqPort;
-    }
-
-    public String getRabbitmqVhost() {
-        return rabbitmqVhost;
-    }
-
-    public void setRabbitmqVhost(String rabbitmqVhost) {
-        this.rabbitmqVhost = rabbitmqVhost;
-    }
-
+    // rabbitmqExchange will always differ for both
+    // GlobalProperties/DuracloudMill config, so it makes
+    // sense to keep this here, rather than in RabbitmqConfig
     public String getRabbitmqExchange() {
         return rabbitmqExchange;
     }
@@ -143,19 +120,11 @@ public class DuracloudMill extends BaseEntity {
         this.rabbitmqExchange = rabbitmqExchange;
     }
 
-    public String getRabbitmqUsername() {
-        return rabbitmqUsername;
+    public RabbitmqConfig getRabbitmqConfig() {
+        return rabbitmqConfig;
     }
 
-    public void setRabbitmqUsername(String rabbitmqUsername) {
-        this.rabbitmqUsername = rabbitmqUsername;
-    }
-
-    public String getRabbitmqPassword() {
-        return rabbitmqPassword;
-    }
-
-    public void setRabbitmqPassword(String rabbitmqPassword) {
-        this.rabbitmqPassword = rabbitmqPassword;
+    public void setRabbitmqConfig(RabbitmqConfig rabbitmqConfig) {
+        this.rabbitmqConfig = rabbitmqConfig;
     }
 }
