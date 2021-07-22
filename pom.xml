@@ -133,10 +133,12 @@
             <artifactId>maven-gpg-plugin</artifactId>
             <version>1.5</version>
             <configuration>
-              <!-- Prevent gpg from using pinentry programs -->
               <gpgArguments>
+                <!-- Prevent gpg from using pinentry programs -->
                 <arg>--pinentry-mode</arg>
                 <arg>loopback</arg>
+                <!-- Avoid TTY errors -->
+                <arg>--batch</arg>
               </gpgArguments>
             </configuration>
             <executions>
