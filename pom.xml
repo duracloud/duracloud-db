@@ -133,7 +133,6 @@
             <artifactId>maven-gpg-plugin</artifactId>
             <version>3.0.1</version>
             <configuration>
-              <passphraseServerId>gpg.passphrase</passphraseServerId>
               <gpgArguments>
                 <!-- Prevent gpg from using pinentry programs -->
                 <arg>--pinentry-mode</arg>
