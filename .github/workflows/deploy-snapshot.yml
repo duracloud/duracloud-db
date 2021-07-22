@@ -1,30 +1,19 @@
-# Continuous Integration Build via GitHub Actions
-name: CI Build
+# Deploy to Sonatype via GitHub Actions
+name: Deploy to Sonatype Snapshot repo
 
-# Run this Build for all pushes / PRs to current branch
-on: [push, pull_request]
+# Run this Build manually
+on: workflow_dispatch
 
 jobs:
-  build-test:
+  deploy-snapshot:
     runs-on: ubuntu-20.04
     env:
       # Specify memory for Maven
       MAVEN_OPTS: "-Xmx256M"
     steps:
-    # Output current build environment
-    - run: echo "This is a CI build of branch ${{ github.ref }} in repository ${{ github.repository }}"
-    - run: echo "This job was triggered by a ${{ github.event_name }} event and is running on a ${{ runner.os }} server"
-
     # https://github.com/actions/checkout
     - name: Checkout codebase
       uses: actions/checkout@v2
-
-    # https://github.com/actions/setup-java
-    - name: Install JDK 11
-      uses: actions/setup-java@v2
-      with:
-        java-version: 11
-        distribution: adopt
 
     # https://github.com/actions/cache
     - name: Cache Maven dependencies
@@ -36,9 +25,22 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-maven-
 
-    # Run build and execute tests
-    - name: Build and Run unit tests
-      run: mvn clean install -DskipIntTests --batch-mode
+    # https://github.com/actions/setup-java
+    # Sets up Java again, this time preparing the settings.xml to deploy to Sonatype
+    - name: Set up for deploy to Sonatype
+      uses: actions/setup-java@v2
+      with:
+        java-version: 11
+        distribution: adopt
+        server-id: sonatype-snapshots # Value of the distributionManagement/repository/id field of the pom.xml
+        server-username: ${{ secrets.SONATYPE_USERNAME }}
+        server-password: ${{ secrets.SONATYPE_PASSWORD }}
+        gpg-private-key: ${{ secrets.CODESIGN_GPG_KEY }}
+        gpg-passphrase: ${{ secrets.CODESIGN_GPG_PASSPHRASE }}
+
+    # Execute deployment to sonatype
+    - name: Publish to Sonatype
+      run: mvn deploy -DreleaseBuild -DskipTests --batch-mode
 
     # https://github.com/marketplace/actions/send-email
     - name: Send result email
@@ -52,19 +54,15 @@ jobs:
         password: ${{ secrets.SMTP_PASSWORD }}
         secure: true
         # email subject
-        subject: CI build for ${{ github.repository }} result - ${{ job.status }}
+        subject: Deployment of SNAPSHOT to Sonatype for ${{ github.repository }} resulted in ${{ job.status }}
         # email body
         body: >
-          A CI Build in ${{ github.repository }} was triggerd by a ${{ github.event_name }} event on
-          branch (or tag) ${{ github.ref }}.
-
-          The result was: ${{ job.status }}
-
+          The deployment of a SNAPSHOT build to Sonatype for ${{ github.repository }} resulted in ${{ job.status }}.
           More details are available here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         # to emails (comma-separated string)
         to: cibuilds@duracloud.org
         # from email
-        from: DuraCloud CI Builder <notifications@duracloud.org>
+        from: DuraCloud Deployer <notifications@duracloud.org>
 
     # https://github.com/marketplace/actions/action-slack
     - name: Send result slack
@@ -72,6 +70,6 @@ jobs:
       if: always()
       with:
         status: ${{ job.status }}
-        fields: repo,message,commit,author,eventName,workflow,took
+        fields: repo,message,eventName,workflow,took
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
