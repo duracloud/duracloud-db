@@ -1,12 +1,13 @@
-# Deploy to Sonatype via GitHub Actions
-name: Deploy to Sonatype Snapshot repo
+# Deploy a Snapshot to Sonatype via GitHub Actions
+name: Sonatype Snapshot Deploy
 
 # Run this Build manually
-on: workflow_dispatch
+#on: workflow_dispatch
+on: push
 
 jobs:
   deploy-snapshot:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       # Specify memory for Maven
       MAVEN_OPTS: "-Xmx256M"

@@ -6,7 +6,7 @@ on: [push, pull_request]
 
 jobs:
   build-test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       # Specify memory for Maven
       MAVEN_OPTS: "-Xmx256M"
@@ -72,6 +72,6 @@ jobs:
       if: always()
       with:
         status: ${{ job.status }}
-        fields: repo,message,commit,author,eventName,workflow,took
+        fields: repo,message,commit,author,eventName,workflow,ref,took
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
