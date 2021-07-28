@@ -34,18 +34,18 @@ jobs:
         java-version: 11
         distribution: adopt
         server-id: sonatype-snapshots # Value of the distributionManagement/repository/id field of the pom.xml
-        server-username: MAVEN_USERNAME # env variable for username in deploy
-        server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
+        server-username: SONATYPE_USERNAME # env variable for sonatype username
+        server-password: SONATYPE_PASSWORD # env variable for sonatype password
         gpg-private-key: ${{ secrets.CODESIGN_GPG_KEY }} # Value of the GPG private key to import
-        gpg-passphrase: MAVEN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+        gpg-passphrase: CODESIGN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
     # Execute deployment to sonatype
     - name: Publish to Sonatype
       run: mvn deploy -DreleaseBuild -DskipTests --batch-mode
       env:
-        MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.CODESIGN_GPG_PASSPHRASE }}
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        CODESIGN_GPG_PASSPHRASE: ${{ secrets.CODESIGN_GPG_PASSPHRASE }}
 
     # https://github.com/marketplace/actions/send-email
     - name: Send result email
@@ -72,7 +72,7 @@ jobs:
     # https://github.com/marketplace/actions/action-slack
     - name: Send result slack
       uses: 8398a7/action-slack@v3
-      if: always()
+      if: failure()
       with:
         status: ${{ job.status }}
         fields: repo,message,eventName,workflow,took
