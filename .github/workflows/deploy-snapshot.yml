@@ -3,36 +3,17 @@ name: Sonatype Snapshot Deploy
 
 # Run this build on push to develop
 on: push
-#on:
-#  push:
-#    branches:
-#    - develop
-#    - main
 
 jobs:
   deploy-snapshot:
-    #if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
-    env:
-      # Specify memory for Maven
-      MAVEN_OPTS: "-Xmx256M"
     steps:
     # https://github.com/actions/checkout
     - name: Checkout codebase
       uses: actions/checkout@v2
 
-    # https://github.com/actions/cache
-    - name: Cache Maven dependencies
-      uses: actions/cache@v2
-      with:
-        # Cache entire ~/.m2/repository
-        path: ~/.m2/repository
-        # Cache key is hash of all pom.xml files. Therefore any changes to POMs will invalidate cache
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-maven-
-
     # https://github.com/actions/setup-java
-    # Sets up Java again, this time preparing the settings.xml to deploy to Sonatype
+    # Sets up Java, preparing the settings.xml to deploy to Sonatype (Maven)
     - name: Set up for deploy to Sonatype
       uses: actions/setup-java@v2
       with:
@@ -44,9 +25,6 @@ jobs:
         gpg-private-key: ${{ secrets.CODESIGN_GPG_KEY }} # Value of the GPG private key to import
         gpg-passphrase: CODESIGN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
-    - name: Check GPG
-      run: gpg --list-keys
-
     # Execute deployment to sonatype
     - name: Publish to Sonatype
       run: mvn deploy -DreleaseBuild -DskipTests --batch-mode
@@ -54,35 +32,3 @@ jobs:
         SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         CODESIGN_GPG_PASSPHRASE: ${{ secrets.CODESIGN_GPG_PASSPHRASE }}
-
-    # https://github.com/marketplace/actions/send-email
-    - name: Send result email
-      uses: dawidd6/action-send-mail@v3
-      if: always()
-      with:
-        # smtp settings
-        server_address: ${{ secrets.SMTP_SERVER_HOST }}
-        server_port: ${{ secrets.SMTP_SERVER_PORT }}
-        username: ${{ secrets.SMTP_USERNAME }}
-        password: ${{ secrets.SMTP_PASSWORD }}
-        secure: true
-        # email subject
-        subject: Deployment of SNAPSHOT to Sonatype for ${{ github.repository }} resulted in ${{ job.status }}
-        # email body
-        body: >
-          The deployment of a SNAPSHOT build to Sonatype for ${{ github.repository }} resulted in ${{ job.status }}.
-          More details are available here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        # to emails (comma-separated string)
-        to: cibuilds@duracloud.org
-        # from email
-        from: DuraCloud Deployer <notifications@duracloud.org>
-
-    # https://github.com/marketplace/actions/action-slack
-    - name: Send slack alert on failure
-      uses: 8398a7/action-slack@v3
-      if: failure()
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,eventName,workflow,took
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
