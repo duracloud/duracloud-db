@@ -1,12 +1,17 @@
 # Deploy a Snapshot to Sonatype via GitHub Actions
 name: Sonatype Snapshot Deploy
 
-# Run this Build manually
-#on: workflow_dispatch
+# Run this build on push to develop
 on: push
+#on:
+#  push:
+#    branches:
+#    - develop
+#    - main
 
 jobs:
   deploy-snapshot:
+    #if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     env:
       # Specify memory for Maven
@@ -70,7 +75,7 @@ jobs:
         from: DuraCloud Deployer <notifications@duracloud.org>
 
     # https://github.com/marketplace/actions/action-slack
-    - name: Send result slack
+    - name: Send slack alert on failure
       uses: 8398a7/action-slack@v3
       if: failure()
       with:

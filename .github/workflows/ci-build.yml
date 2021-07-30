@@ -1,7 +1,7 @@
 # Continuous Integration Build via GitHub Actions
 name: CI Build
 
-# Run this Build for all pushes / PRs to current branch
+# Run this Build for all pushes and PRs
 on: [push, pull_request]
 
 jobs:
@@ -67,9 +67,9 @@ jobs:
         from: DuraCloud CI Builder <notifications@duracloud.org>
 
     # https://github.com/marketplace/actions/action-slack
-    - name: Send result slack
+    - name: Send slack alert on failure
       uses: 8398a7/action-slack@v3
-      if: always()
+      if: failure()
       with:
         status: ${{ job.status }}
         fields: repo,message,commit,author,eventName,workflow,ref,took
