@@ -8,27 +8,30 @@ jobs:
   deploy-snapshot:
     runs-on: ubuntu-latest
     steps:
+    # Note to look at output of ci-build.yml
+    - run: echo "The step to push to sonatype has been copied over to ci-build.yml, to see if that changes the result"
+
     # https://github.com/actions/checkout
-    - name: Checkout codebase
-      uses: actions/checkout@v2
+#    - name: Checkout codebase
+#      uses: actions/checkout@v2
 
     # https://github.com/actions/setup-java
     # Sets up Java, preparing the settings.xml to deploy to Sonatype (Maven)
-    - name: Set up for deploy to Sonatype
-      uses: actions/setup-java@v2
-      with:
-        java-version: 11
-        distribution: adopt
-        server-id: sonatype-snapshots # Value of the distributionManagement/repository/id field of the pom.xml
-        server-username: SONATYPE_USERNAME # env variable for sonatype username
-        server-password: SONATYPE_PASSWORD # env variable for sonatype password
-        gpg-private-key: ${{ secrets.CODESIGN_GPG_KEY }} # Value of the GPG private key to import
-        gpg-passphrase: CODESIGN_GPG_PASSPHRASE # env variable for GPG private key passphrase
+#    - name: Set up for deploy to Sonatype
+#      uses: actions/setup-java@v2
+#      with:
+#        java-version: 11
+#        distribution: adopt
+#        server-id: sonatype-snapshots # Value of the distributionManagement/repository/id field of the pom.xml
+#        server-username: SONATYPE_USERNAME # env variable for sonatype username
+#        server-password: SONATYPE_PASSWORD # env variable for sonatype password
+#        gpg-private-key: ${{ secrets.CODESIGN_GPG_KEY }} # Value of the GPG private key to import
+#        gpg-passphrase: CODESIGN_GPG_PASSPHRASE # env variable for GPG private key passphrase
 
     # Execute deployment to sonatype
-    - name: Publish to Sonatype
-      run: mvn deploy -DreleaseBuild -DskipTests --batch-mode
-      env:
-        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-        CODESIGN_GPG_PASSPHRASE: ${{ secrets.CODESIGN_GPG_PASSPHRASE }}
+#    - name: Publish to Sonatype
+#      run: mvn deploy -DreleaseBuild -DskipTests --batch-mode
+#      env:
+#        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+#        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+#        CODESIGN_GPG_PASSPHRASE: ${{ secrets.CODESIGN_GPG_PASSPHRASE }}
