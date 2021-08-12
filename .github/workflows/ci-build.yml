@@ -41,7 +41,7 @@ jobs:
       run: mvn clean install -DskipIntTests --batch-mode
 
     # https://github.com/actions/setup-java
-    # Sets up Java, preparing the settings.xml to deploy to Sonatype (Maven)
+    # Sets up Java again, preparing the settings.xml to deploy to Sonatype (Maven)
     - name: Set up for deploy to Sonatype
       uses: actions/setup-java@v2
       with:
