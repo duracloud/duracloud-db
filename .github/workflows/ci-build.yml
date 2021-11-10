@@ -5,7 +5,7 @@ name: CI Build
 on: [push, pull_request]
 
 jobs:
-  build-test:
+  ci-build:
     runs-on: ubuntu-latest
     env:
       # Specify memory for Maven
