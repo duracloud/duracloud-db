@@ -131,7 +131,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
+            <version>3.0.1</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -165,7 +165,6 @@
     <slf4j.version>1.7.6</slf4j.version>
     <jaxb.api.version>2.3.1</jaxb.api.version>
 
-    <skipUTs>false</skipUTs>
     <skipITs>true</skipITs>
   </properties>
 
@@ -307,7 +306,6 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.17</version>
         <configuration>
-          <skipTests>${skipUTs}</skipTests>
           <trimStackTrace>false</trimStackTrace>
           <systemProperties>
             <property>
