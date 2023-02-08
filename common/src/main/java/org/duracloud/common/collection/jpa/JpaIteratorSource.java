@@ -42,7 +42,7 @@ public abstract class JpaIteratorSource<R, T> implements IteratorSource<T> {
         if (currentPage < 0) {
             return null;
         }
-        Page<T> page = getNextPage(new PageRequest(currentPage, maxResults), repo);
+        Page<T> page = getNextPage(PageRequest.of(currentPage, maxResults), repo);
         currentPage++;
         if (page.getTotalPages() == currentPage) {
             currentPage = -1;
