@@ -8,22 +8,14 @@
 
 package org.duracloud.mill.test.jpa;
 
-import static com.wix.mysql.EmbeddedMysql.anEmbeddedMysql;
-import static com.wix.mysql.config.Charset.UTF8;
-import static com.wix.mysql.config.MysqldConfig.aMysqldConfig;
-import static com.wix.mysql.distribution.Version.v5_6_latest;
-
-import java.util.concurrent.TimeUnit;
-
-import com.wix.mysql.EmbeddedMysql;
-import com.wix.mysql.ScriptResolver;
-import com.wix.mysql.config.MysqldConfig;
 import org.easymock.EasyMockRunner;
 import org.easymock.EasyMockSupport;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 /**
  * @author Daniel Bernstein
@@ -32,31 +24,26 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 @RunWith(EasyMockRunner.class)
 public abstract class JpaIntegrationTestBase extends EasyMockSupport {
 
-    private EmbeddedMysql mysqld = null;
+    @ClassRule
+    public static MySQLContainer<?> mysql = new MySQLContainer<>(DockerImageName.parse("mysql:5.7-debian"))
+        .withUsername("user")
+        .withPassword("pass")
+        .withDatabaseName("mill")
+        .withInitScript("db_init.sql")
+        .withEnv("TZ", "GMT")
+        .withEnv("max_connect_errors", "666");
 
-    protected AnnotationConfigApplicationContext context;
+    protected static AnnotationConfigApplicationContext context;
 
-    @Before
-    public void setup() {
-        int port = 3310;
-        MysqldConfig config = aMysqldConfig(v5_6_latest).withCharset(UTF8).withPort(3306).withUser("user", "pass")
-                                                        .withTimeZone("GMT").withTimeout(2, TimeUnit.MINUTES)
-                                                        .withServerVariable("max_connect_errors", 666)
-                                                        .withPort(port)
-                                                        .build();
-
-        mysqld = anEmbeddedMysql(config).addSchema("mill", ScriptResolver.classPathScript("db_init.sql")).start();
-
+    @BeforeClass
+    public static void setup() {
         System.setProperty("generate.database", "true");
-        System.setProperty("mill.db.port", port + "");
+        System.setProperty("mill.db.port", mysql.getFirstMappedPort().toString());
+        System.setProperty("mill.db.host", mysql.getHost());
+        System.setProperty("mill.db.user", mysql.getUsername());
+        System.setProperty("mill.db.pass", mysql.getPassword());
 
         context = new AnnotationConfigApplicationContext("org.duracloud.mill");
-
-    }
-
-    @After
-    public void tearDown() {
-        mysqld.stop();
     }
 
 }

@@ -94,9 +94,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.wix</groupId>
-      <artifactId>wix-embedded-mysql</artifactId>
-      <version>2.2.3</version>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mysql</artifactId>
+      <version>1.17.6</version>
       <scope>test</scope>
     </dependency>
 

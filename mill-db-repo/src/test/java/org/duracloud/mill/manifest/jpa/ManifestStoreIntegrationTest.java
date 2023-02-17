@@ -19,6 +19,7 @@ import org.duracloud.mill.db.model.ManifestItem;
 import org.duracloud.mill.manifest.ManifestItemWriteException;
 import org.duracloud.mill.manifest.ManifestStore;
 import org.duracloud.mill.test.jpa.JpaIntegrationTestBase;
+import org.junit.After;
 import org.junit.Test;
 
 /**
@@ -169,6 +170,15 @@ public class ManifestStoreIntegrationTest extends JpaIntegrationTestBase {
     @Test(expected = ManifestItemWriteException.class)
     public void updateMissingFromStorageProviderFlagNotFound() throws Exception {
         getStore().updateMissingFromStorageProviderFlag(account, storeId, spaceId, contentId, true);
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            getStore().delete(account, storeId, spaceId);
+        } catch (final Exception ignored) {
+            // ...ignored
+        }
     }
 
     private ManifestStore getStore() {
