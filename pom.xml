@@ -157,8 +157,8 @@
     <log.level.default>INFO</log.level.default>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <duraspace-codestyle.version>1.1.0</duraspace-codestyle.version>
-    <org.springframework.version>5.3.25</org.springframework.version>
-    <org.springframework.security.version>5.8.2</org.springframework.security.version>
+    <org.springframework.version>5.3.27</org.springframework.version>
+    <org.springframework.security.version>5.8.3</org.springframework.security.version>
     <org.springframework.data.jpa.version>2.7.7</org.springframework.data.jpa.version>
     <org.springframework.data.commons.version>2.7.7</org.springframework.data.commons.version>
     <hibernate.version>5.4.33.Final</hibernate.version>
