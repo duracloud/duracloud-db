@@ -162,7 +162,7 @@
     <org.springframework.data.jpa.version>2.7.7</org.springframework.data.jpa.version>
     <org.springframework.data.commons.version>2.7.7</org.springframework.data.commons.version>
     <hibernate.version>5.4.33.Final</hibernate.version>
-    <mysql.driver.version>5.1.49</mysql.driver.version>
+    <mysql.driver.version>8.0.33</mysql.driver.version>
     <slf4j.version>1.7.6</slf4j.version>
     <jaxb.api.version>2.3.1</jaxb.api.version>
 
@@ -625,9 +625,15 @@
       </dependency>
 
       <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
         <version>${mysql.driver.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
