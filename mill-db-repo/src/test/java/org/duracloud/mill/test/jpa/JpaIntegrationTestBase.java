@@ -15,7 +15,6 @@ import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.utility.DockerImageName;
 
 /**
  * @author Daniel Bernstein
@@ -25,7 +24,7 @@ import org.testcontainers.utility.DockerImageName;
 public abstract class JpaIntegrationTestBase extends EasyMockSupport {
 
     @ClassRule
-    public static MySQLContainer<?> mysql = new MySQLContainer<>(DockerImageName.parse("mysql:5.7-debian"))
+    public static MySQLContainer<?> mysql = new MySQLContainer<>()
         .withUsername("user")
         .withPassword("pass")
         .withDatabaseName("mill")
