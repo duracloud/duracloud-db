@@ -17,6 +17,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.duracloud.common.db.error.NotFoundException;
 import org.duracloud.mill.auditor.AuditLogItem;
@@ -59,9 +60,9 @@ public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem> {
 
     /**
      * Test method for
-     * {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#write(java.lang.String, java.lang.String, java.lang
-     * .String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang
-     * .String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Date)}
+     * {@link org.duracloud.mill.auditor.jpa.JpaAuditLogStore#write(java.lang.String, java.lang.String,
+     * java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String,
+     * java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.util.Date)}
      * .
      *
      * @throws AuditLogWriteFailedException
@@ -173,7 +174,7 @@ public class JpaAuditLogStoreTest extends JpaTestBase<JpaAuditLogItem> {
         String serializedProps = "{}";
 
         JpaAuditLogItem freshItem = createMock(JpaAuditLogItem.class);
-        expect(repo.findOne(eq(id))).andReturn(freshItem);
+        expect(repo.findById(eq(id))).andReturn(Optional.of(freshItem));
         freshItem.setContentProperties(serializedProps);
         expectLastCall().once();
         expect(repo.saveAndFlush(freshItem)).andReturn(freshItem);

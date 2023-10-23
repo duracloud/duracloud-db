@@ -50,10 +50,10 @@ public class AccountJpaRepoConfig {
     @Bean(name = ACCOUNT_REPO_DATA_SOURCE_BEAN, destroyMethod = "close")
     public BasicDataSource accountRepoDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl(MessageFormat.format("jdbc:mysql://{0}:{1}/{2}" +
                                                "?characterEncoding=utf8" +
-                                               "&characxterSetResults=utf8",
+                                               "&characterSetResults=utf8",
                                                env.getProperty(ConfigConstants.MC_DB_HOST, "localhost"),
                                                env.getProperty(ConfigConstants.MC_DB_PORT, "3306"),
                                                env.getProperty(ConfigConstants.MC_DB_NAME, "name")));

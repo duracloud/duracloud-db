@@ -10,6 +10,7 @@ package org.duracloud.mill.auditor.jpa;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.duracloud.common.collection.StreamingIterator;
 import org.duracloud.common.collection.jpa.JpaIteratorSource;
@@ -84,6 +85,7 @@ public class JpaAuditLogStore implements AuditLogStore {
                 log.warn(
                     "failed to add audit log item {}: due to data integrity violation: suspected duplicate record: ->" +
                     " message={}",
+                    item.getId(),
                     ex.getMessage());
             } else {
                 throw new AuditLogWriteFailedException(ex, item);
@@ -142,9 +144,11 @@ public class JpaAuditLogStore implements AuditLogStore {
         }
         Long id = ((JpaAuditLogItem) item).getId();
 
-        JpaAuditLogItem refreshedItem = auditLogRepo.findOne(id);
-        refreshedItem.setContentProperties(properties);
-        auditLogRepo.saveAndFlush(refreshedItem);
+        Optional<JpaAuditLogItem> queriedItem = auditLogRepo.findById(id);
+        queriedItem.ifPresent(refreshedItem -> {
+            refreshedItem.setContentProperties(properties);
+            auditLogRepo.saveAndFlush(refreshedItem);
+        });
     }
 
 }
