@@ -6,7 +6,7 @@
   <groupId>org.duracloud.db</groupId>
   <artifactId>db</artifactId>
   <packaging>pom</packaging>
-  <version>8.0.2</version>
+  <version>8.1.0-SNAPSHOT</version>
   <name>DuraCloud DB</name>
   <description>DuraCloud Database Management</description>
   <url>https://duracloud.org</url>
